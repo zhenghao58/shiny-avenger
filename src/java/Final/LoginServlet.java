@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,17 +33,37 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+
+            UserBean user = new UserBean();
+            user.setUserName(request.getParameter("un"));
+            user.setPassword(request.getParameter("pw"));
+
+            user = UserDAO.login(user);
+
+            if (user.isValid()) {
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute("currentSessionUser", user);
+                response.sendRedirect("index.jsp"); //logged-in page      		
+            } else {
+                try (PrintWriter out = response.getWriter()) {
+                    out.println("<!DOCTYPE html>");
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Servlet LoginServlet</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<p> Hello! This account doesn't exist!</p>");
+                    out.println("</body>");
+                    out.println("</html>");
+                }
+            }
+            //response.sendRedirect("invalidLogin.jsp"); //error page 
+            
+            
+        } catch (Throwable theException) {
+            System.out.println(theException);
         }
     }
 
@@ -58,7 +79,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        System.out.println("get");
     }
 
     /**
@@ -72,6 +93,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("post");
         processRequest(request, response);
     }
 
