@@ -14,11 +14,11 @@ public class UserBean {
     private String username;
     private String password;
     private int user_id;
-    private String name;
+    public String name;
     public boolean valid;
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getPassword() {

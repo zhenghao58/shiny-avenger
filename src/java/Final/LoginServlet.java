@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author apple
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
+@WebServlet(name = "Home", urlPatterns = {"/home"})
 public class LoginServlet extends HttpServlet {
 
     /**
@@ -32,7 +32,6 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         try {
 
             UserBean user = new UserBean();
@@ -42,26 +41,15 @@ public class LoginServlet extends HttpServlet {
             user = UserDAO.login(user);
 
             if (user.isValid()) {
-
+                request.setAttribute("servletName", "servletToJsp");
                 HttpSession session = request.getSession(true);
                 session.setAttribute("currentSessionUser", user);
-                response.sendRedirect("index.jsp"); //logged-in page      		
+                request.getRequestDispatcher("home.jsp").forward(request, response);
             } else {
-                try (PrintWriter out = response.getWriter()) {
-                    out.println("<!DOCTYPE html>");
-                    out.println("<html>");
-                    out.println("<head>");
-                    out.println("<title>Servlet LoginServlet</title>");
-                    out.println("</head>");
-                    out.println("<body>");
-                    out.println("<p> Hello! This account doesn't exist!</p>");
-                    out.println("</body>");
-                    out.println("</html>");
-                }
-            }
-            //response.sendRedirect("invalidLogin.jsp"); //error page 
-            
-            
+                String message = "Unknown username/password. Please retry.";
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("index.jsp").include(request, response);
+            }        
         } catch (Throwable theException) {
             System.out.println(theException);
         }
@@ -79,7 +67,12 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("get");
+        if (((HttpServletRequest) request).getSession().getAttribute("currentSessionUser") == null){
+            System.out.println(request.getContextPath()+ "\n"+request.getServletPath());
+            response.sendRedirect("index.jsp"); 
+        } 
+            
+        else request.getRequestDispatcher("home.jsp").include(request, response);
     }
 
     /**
