@@ -65,7 +65,7 @@
                                         </div>
                                     </form>
 
-                                    <form id="register-form" action="http://phpoll.com/register/process" method="post" role="form" style="display: none;" data-toggle="validator">
+                                    <form id="register-form" action="register" method="post" role="form" style="display: none;" data-toggle="validator">
                                         <div class="form-group">
                                             <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" required>
                                         </div>
