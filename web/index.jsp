@@ -65,18 +65,20 @@
                                         </div>
                                     </form>
 
-                                    <form id="register-form" action="http://phpoll.com/register/process" method="post" role="form" style="display: none;">
+                                    <form id="register-form" action="http://phpoll.com/register/process" method="post" role="form" style="display: none;" data-toggle="validator">
                                         <div class="form-group">
-                                            <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                            <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+                                            <input type="text" name="name" maxlength="20" id="name" tabindex="1" class="form-control" placeholder="Your Name" value="" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                            <input type="password" name="password" id="regpassword" tabindex="2" class="form-control" data-minlength="6" placeholder="Password" required>
+                                            <span class="help-block">Minimum of 6 characters</span>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                                            <input type="password" name="confirm-password" data-match="#regpassword" id="confirm-password"  data-match-error="Whoops, these don't match" tabindex="2" class="form-control" placeholder="Confirm Password" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
@@ -96,6 +98,7 @@
         <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="js/login.js"></script>
+        <script src="js/validator.js"></script>
     </body>
     
 </html>
