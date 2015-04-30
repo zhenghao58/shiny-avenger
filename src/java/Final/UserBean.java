@@ -9,13 +9,13 @@ package Final;
  *
  * @author apple
  */
-public class UserBean {
+public class UserBean implements java.io.Serializable {
 
     private String username;
     private String password;
     private int user_id;
-    public String name;
-    public boolean valid;
+    private String name;
+    private boolean valid;
 
     public String getName() {
         return this.name;

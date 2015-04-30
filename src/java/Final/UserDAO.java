@@ -55,7 +55,7 @@ public class UserDAO {
                 String name = rs.getString("name");
                 Timestamp create_time = rs.getTimestamp("create_time");
 
-                System.out.println("Welcome " + name + " " + create_time.toString());
+                System.out.println("Welcome " + name);
                 bean.setName(name);
                 bean.setValid(true);
             }

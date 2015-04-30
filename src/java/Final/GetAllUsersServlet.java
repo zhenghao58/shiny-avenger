@@ -5,20 +5,23 @@
  */
 package Final;
 
+import com.google.gson.Gson;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author apple
  */
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
-public class RegisterServlet extends HttpServlet {
+@WebServlet(name = "GetAllUsersServlet", urlPatterns = {"/api/getAllUsers"})
+public class GetAllUsersServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,27 +34,16 @@ public class RegisterServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-
-            UserBean user = new UserBean();
-            user.setUserName(request.getParameter("username"));
-            user.setPassword(request.getParameter("password"));
-            user.setName(request.getParameter("name"));
-
-            boolean success = UserDAO.register(user);
-            if(success){
-                request.setAttribute("servletName", "servletToJsp");
-                HttpSession session = request.getSession(true);
-                session.setAttribute("currentSessionUser", user);
-                request.getRequestDispatcher("home.jsp").forward(request, response);
-            }else{
-                String message = "Register Failed!";
-                request.setAttribute("message", message);
-                request.getRequestDispatcher("index.jsp").include(request, response);
-            }
-            
-        } catch (Throwable theException) {
-            System.out.println(theException);
+        List<String> list = new ArrayList<String>();
+        list.add("item1");
+        list.add("item2");
+        list.add("item3");
+        String json = new Gson().toJson(list);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            //out.println(message);
+            out.println(json);
         }
     }
 
