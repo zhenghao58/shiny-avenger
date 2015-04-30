@@ -92,6 +92,10 @@ public class UserDAO {
         return bean;
 
     }
+    
+//    public static List<UserBean> getAllUsers(){
+//        
+//    } 
 
     public static boolean register(UserBean bean) {
 
