@@ -18,7 +18,11 @@ body {
 
 }
 
-
+.help-block{
+	padding-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
 
 .jumbotron{
 	width: 50%;

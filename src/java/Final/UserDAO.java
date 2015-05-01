@@ -5,7 +5,6 @@
  */
 package Final;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,7 +34,7 @@ public class UserDAO {
             boolean more=MyConnectionManager.excute(searchQuery);
             rs=MyConnectionManager.getRs();
             
-            
+            rs.next();
             // if user does not exist set the isValid variable to false
             if (!more) {
                 System.out.println("Sorry, you are not a registered user! Please sign up first");
@@ -56,10 +55,6 @@ public class UserDAO {
 
     }
     
-//    public static List<UserBean> getAllUsers(){
-//        
-//    } 
-
     public static boolean register(UserBean bean) throws SQLException {
 
         //preparing some objects for connection 

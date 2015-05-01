@@ -7,6 +7,8 @@ package Final;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,17 +41,17 @@ public class LoginServlet extends HttpServlet {
             user.setPassword(request.getParameter("pw"));
 
             user = UserDAO.login(user);
-
             if (user.isValid()) {
                 request.setAttribute("servletName", "servletToJsp");
                 HttpSession session = request.getSession(true);
                 session.setAttribute("currentSessionUser", user);
+                request.setAttribute("requestList", getRequestUsers());
                 request.getRequestDispatcher("home.jsp").forward(request, response);
             } else {
                 String message = "Unknown username/password. Please retry.";
                 request.setAttribute("message", message);
                 request.getRequestDispatcher("index.jsp").include(request, response);
-            }        
+            }
         } catch (Throwable theException) {
             System.out.println(theException);
         }
@@ -67,12 +69,14 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (((HttpServletRequest) request).getSession().getAttribute("currentSessionUser") == null){
-            System.out.println(request.getContextPath()+ "\n"+request.getServletPath());
-            response.sendRedirect("index.jsp"); 
-        } 
-            
-        else request.getRequestDispatcher("home.jsp").include(request, response);
+        if (((HttpServletRequest) request).getSession().getAttribute("currentSessionUser") == null) {
+            System.out.println(request.getContextPath() + "\n" + request.getServletPath());
+            response.sendRedirect("index.jsp");
+        } else {
+            request.setAttribute("requestList", getRequestUsers());
+            System.out.println("Loging using Get!");
+            request.getRequestDispatcher("home.jsp").include(request, response);
+        }
     }
 
     /**
@@ -86,8 +90,20 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("post");
         processRequest(request, response);
+    }
+
+    private static List<UserBean> getRequestUsers() {
+        UserBean ub1 = new UserBean();
+        ub1.setUser_id(2);
+        ub1.setName("Hao Zheng");
+        UserBean ub2 = new UserBean();
+        ub2.setUser_id(4);
+        ub2.setName("Tom");
+        List<UserBean> requestList = new ArrayList<>();
+        requestList.add(ub1);
+        requestList.add(ub2);
+        return requestList;
     }
 
     /**

@@ -141,8 +141,65 @@ hr {
   */
 }
 
+.navbar-top-links .dropdown-menu li {
+    display: block;
+}
+
+.navbar-top-links .dropdown-menu li:last-child {
+    margin-right: 0;
+}
+
+.navbar-top-links .dropdown-menu li a {
+    padding: 3px 20px;
+    min-height: 0;
+}
+
+.navbar-top-links .dropdown-menu li a div {
+    white-space: normal;
+}
+
+.navbar-top-links .dropdown-messages,
+.navbar-top-links .dropdown-tasks,
+.navbar-top-links .dropdown-alerts {
+    width: 310px;
+    min-width: 0;
+}
+
+.navbar-top-links .dropdown-messages {
+    margin-left: 5px;
+}
+
+.navbar-top-links .dropdown-tasks {
+    margin-left: -59px;
+}
+
+.navbar-top-links .dropdown-alerts {
+    margin-left: -123px;
+}
+
+.navbar-top-links .dropdown-user {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-alerts li span.text-muted{
+  padding-bottom: 5px;
+}
 .divider {
 	margin-top:32px;
+}
+
+.friend-request-btn{
+  height: 25px;
+  margin-top: 5px;
+}
+
+.friend-request-btn button.pull-right{
+  margin-right: 20px;
+}
+
+.friend-request-btn button:not(.pull-right){
+  margin-left: 20px;
 }
 
 .navbar-blue {
@@ -159,12 +216,30 @@ hr {
    color:#efefef;
 }
 
-.navbar-blue .dropdown-menu li a {color:#2A4888;}
-.navbar-blue .dropdown-menu li > a {padding-left:30px;}
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.428571429;
+}
+.btn-info.btn-outline {
+    color: #5bc0de;
+}
+
+.navbar-blue .dropdown-menu li a {color:#515151}
+
 
 .navbar-blue li>a:hover, .navbar-blue li>a:focus, .navbar-blue .open, .navbar-blue .open>a, .navbar-blue .open>a:hover, .navbar-blue .open>a:focus {
    background-color:#2A4888;
    color:#fff;
+}
+
+ul.dropdown-alerts li>a:hover, ul.dropdown-alerts li>a:hover{
+  background-color:#FFF;
+  color:#515151;
 }
 
 #main {
@@ -340,6 +415,14 @@ small.text-muted {
     position:relative;
   }
 
+}
+
+@media(min-width:768px) {
+    .navbar-top-links .dropdown-messages,
+    .navbar-top-links .dropdown-tasks,
+    .navbar-top-links .dropdown-alerts {
+        margin-left: auto;
+    }
 }
 
 

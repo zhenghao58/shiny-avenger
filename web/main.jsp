@@ -21,9 +21,9 @@
             <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Bootstrap Examples</h4></div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="http://bootply.com/tagged/modal" class="list-group-item">Modal / Dialog</a>
-                    <a href="http://bootply.com/tagged/datetime" class="list-group-item">Datetime Examples</a>
-                    <a href="http://bootply.com/tagged/datatable" class="list-group-item">Data Grids</a>
+                    <a href="#" class="list-group-item">Modal / Dialog</a>
+                    <a href="#" class="list-group-item">Datetime Examples</a>
+                    <a href="#" class="list-group-item">Data Grids</a>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <div class="clearfix"></div>
                 There a load of new free Bootstrap 3 ready templates at Bootply. All of these templates are free and don't require extensive customization to the Bootstrap baseline.
                 <hr>
-                <ul class="list-unstyled"><li><a href="http://www.bootply.com/templates">Dashboard</a></li><li><a href="http://www.bootply.com/templates">Darkside</a></li><li><a href="http://www.bootply.com/templates">Greenfield</a></li></ul>
+                <ul class="list-unstyled"><li><a href="#">Dashboard</a></li><li><a href="#">Darkside</a></li><li><a href="#">Greenfield</a></li></ul>
             </div>
         </div>
 
@@ -89,7 +89,7 @@
                 <div class="clearfix"></div>
                 <hr>
 
-                <p>If you're looking for help with Bootstrap code, the <code>twitter-bootstrap</code> tag at <a href="http://stackoverflow.com/questions/tagged/twitter-bootstrap">Stackoverflow</a> is a good place to find answers.</p>
+                <p>If you're looking for help with Bootstrap code, the <code>twitter-bootstrap</code> tag at <a href="#">Stackoverflow</a> is a good place to find answers.</p>
 
                 <hr>
                 <form>

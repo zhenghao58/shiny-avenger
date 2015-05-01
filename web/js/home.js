@@ -1,4 +1,3 @@
-
 $(document).ready(function () {/* off-canvas sidebar toggle */
     var id = $('i#user-id').attr('value');
     var path = window.location.pathname;
@@ -13,7 +12,6 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     });
 
     $("button#status-submit").click(function () {
-        console.log($('i#user-id').attr('value'));
         $.ajax({
             type: "POST",
             url: contextPath + '/api/postMessage',
@@ -23,8 +21,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 privacy: "public"
             },
             success: function (msg) {
-                console.log(msg);
-                console.log(msg.length);
+                $('form#status textarea').val('');
             },
             error: function () {
                 alert("failure");
@@ -34,38 +31,46 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
 
     $("#search-friend-form button").click(function (event) {
         swal({title: "Send Request?",
-            text: "You will send the friend request to this guy.",
+            text: 'You will send the friend request to this guy.',
             type: "info",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Yes!",
             closeOnConfirm: false
         }, function () {
-            $.post(contextPath + '/api/request', {friend_name: $('#search-friend').val().trim(), user_id: id}, function(data) {
-                if(data==="true") swal("Sent!", "", 'success');
-                else swal("Error!", "Server Error", 'error');
+            $.post(contextPath + '/api/request', {friend_name: $('#search-friend').val().trim(), user_id: id}, function (data) {
+                if (data === 'true')
+                    swal('Sent!', '', 'success');
+                else
+                    swal('Error!', 'Server Error', 'error');
                 console.log(data);
             });
         });
     });
 
+    $(".dropdown-alerts button.btn-info").click(function () {
+        var $user_id = $(this).val()
+        var $item = $('ul.dropdown-alerts li[value='+$user_id+']');
+        $item.hide('slow');
+        $item.next('.divider').hide('slow');
+    });
 
-    $.getJSON(contextPath+'/api/getAllUsers', {user_id: id}, function(data) {
+    $.getJSON(contextPath + '/api/getAllUsers', {user_id: id}, function (data) {
         var allUsers = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: data,     
+            local: data,
         });
 
-         $('.typeahead').typeahead({
-             hint: true,
-             highlight: true,
-             minLength: 1
-         },
-         {
-             name: 'allUsers',
-             source: allUsers
-         });
+        $('.typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'allUsers',
+            source: allUsers
+        });
     });
 
 

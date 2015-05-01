@@ -40,10 +40,12 @@ public class RegisterServlet extends HttpServlet {
 
             boolean success = UserDAO.register(user);
             if(success){
-                request.setAttribute("servletName", "servletToJsp");
-                HttpSession session = request.getSession(true);
-                session.setAttribute("currentSessionUser", user);
-                request.getRequestDispatcher("home.jsp").forward(request, response);
+                request.setAttribute("complete", "yes");
+//                HttpSession session = request.getSession(true);
+//                session.setAttribute("currentSessionUser", user);
+                //request.getRequestDispatcher("home.jsp").forward(request, response);
+                request.setAttribute("message", "Registration Complete! Please Login!");
+                request.getRequestDispatcher("index.jsp").include(request, response);
             }else{
                 String message = "Register Failed!";
                 request.setAttribute("message", message);

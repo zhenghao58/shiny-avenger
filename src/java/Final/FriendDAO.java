@@ -51,7 +51,6 @@ public class FriendDAO {
         //connect to DB 
         MyConnectionManager.getConnection();
         result = MyConnectionManager.update(insertQuery);
-        
         MyConnectionManager.closeConnection();
         return result;
     }

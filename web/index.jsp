@@ -34,9 +34,12 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <form id="login-form" action="home" method="post" role="form" style="display: block;">
-                                        <c:if test="${message!=null}">
+                                        <c:if test="${complete!='yes' && message!=null}">
                                             <div class="alert alert-danger" role="alert">${message}</div>
                                         </c:if>
+                                        <c:if test="${complete=='yes'}">
+                                            <div class="alert alert-success" role="alert">${message}</div>
+                                        </c:if>     
                                         <div class="form-group">
                                             <input type="text" name="un" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                                         </div>
@@ -74,7 +77,7 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="password" id="regpassword" tabindex="2" class="form-control" data-minlength="6" placeholder="Password" required>
-                                            <span class="help-block">Minimum of 6 characters</span>
+                                            <span class="help-block">  Minimum of 6 characters</span>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="confirm-password" data-match="#regpassword" id="confirm-password"  data-match-error="Whoops, these don't match" tabindex="2" class="form-control" placeholder="Confirm Password" required>
@@ -100,5 +103,5 @@
         <script src="js/login.js"></script>
         <script src="js/validator.js"></script>
     </body>
-    
+
 </html>

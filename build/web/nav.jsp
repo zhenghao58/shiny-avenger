@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="navbar navbar-blue navbar-static-top">  
     <div class="navbar-header">
         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
@@ -28,16 +29,49 @@
                 <a href="#"><span class="badge">badge</span></a>
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right navbar-top-links">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
                 <ul class="dropdown-menu">
-                    <li><a href="">More</a></li>
-                    <li><a href="">More</a></li>
-                    <li><a href="">More</a></li>
-                    <li><a href="">More</a></li>
-                    <li><a href="">More</a></li>
+                    <c:forEach begin="0" end="4">
+                       <li><a href="">More</a></li> 
+                    </c:forEach>
                 </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts">
+                    <c:forEach items="${requestList}" var="row">
+                        <li value="${row.getUser_id()}">
+                            <a>
+                                <div>
+                                    <p>
+                                        <strong>${row.getName()}</strong>
+
+                                        <span class="pull-right text-muted">4 minutes ago</span>
+                                        <div class="friend-request-btn">
+                                            <button type="button" class="btn btn-info btn-circle" value="${row.getUser_id()}">
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-circle pull-right" value="${row.getUser_id()}">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                    </c:forEach>
+                    <li>
+                        <a class="text-center">
+                            <strong>New Friend Requests</strong>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.dropdown-alerts -->
             </li>
         </ul>
     </nav>
