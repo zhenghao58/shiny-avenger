@@ -21,6 +21,9 @@ span.twitter-typeahead {
 
 button.btn.btn-lg.btn-primary{
   bottom:  2px;
+  padding: 10px 5px;
+  font-size: 14px;
+  min-height: 46px;
 }
 
 input#search-friend.typeahead.form-control{

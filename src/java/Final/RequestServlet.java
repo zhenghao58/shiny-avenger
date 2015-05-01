@@ -5,9 +5,11 @@
  */
 package Final;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,11 +34,23 @@ public class RequestServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("post: " + request.getParameter("text"));
         response.setContentType("text/html;charset=UTF-8");
-        String message = request.getParameter("text");
-        try (PrintWriter out = response.getWriter()) {
-            out.print(message);
+        String friend_name = request.getParameter("friend_name");
+        int user_id = Integer.parseInt(request.getParameter("user_id"));
+        boolean success = false;
+        try {
+            success = FriendDAO.request(friend_name, user_id);
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (success) {
+            try (PrintWriter out = response.getWriter()) {
+                out.print("true");
+            }
+        }else{
+            try (PrintWriter out = response.getWriter()) {
+                out.print("false");
+            }
         }
     }
 
@@ -52,10 +66,9 @@ public class RequestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        try (PrintWriter out = response.getWriter()) {
-//            out.println("Bad Request");
-//        }
-        processRequest(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            out.println("Bad Request");
+        }
     }
 
     /**

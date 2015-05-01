@@ -15,7 +15,8 @@
         <meta name="generator" content="Bootply" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-<!--         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> -->
+        <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
+        <!--         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> -->
         <!--[if lt IE 9]>
                 <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -36,13 +37,13 @@
 
                         <ul class="nav hidden-xs" id="lg-menu">
                             <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> Featured</a></li>
-                            <li><a href="#stories"><i class="glyphicon glyphicon-list"></i>Stories</a></li>
-                            <li><a href="#"><i class="glyphicon glyphicon-paperclip"></i>Saved</a></li>
-                            <li><a href="#"><i class="glyphicon glyphicon-refresh"></i>Refresh</a></li>
+                            <li><a href="#stories"><i class="glyphicon glyphicon-list"></i> Stories</a></li>
+                            <li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> Saved</a></li>
+                            <li><a href="#"><i class="glyphicon glyphicon-refresh"></i> Refresh</a></li>
                         </ul>
                         <ul class="list-unstyled hidden-xs" id="sidebar-footer">
                             <li>
-                                <a href="http://www.bootply.com"><h3>Tourini</h3> <i class="glyphicon glyphicon-heart-empty"></i>Hello</a>
+                                <a href="#"><h3>Tourini</h3> <i class="glyphicon glyphicon-heart-empty"></i>Hello</a>
                             </li>
                         </ul>
 
@@ -62,10 +63,13 @@
                         <!-- top nav -->
                         <c:import url="nav.jsp" />
                         <!-- /top nav -->
-                        <c:import url="main.jsp" /> 
+                        <div class="padding">
+                            <div class="full col-sm-9">
+                                <c:import url="main.jsp" />
+                            </div><!-- /col-9 -->
+                        </div><!-- /padding -->
                     </div>
                     <!-- /main -->
-
                 </div>
             </div>
         </div>
@@ -97,10 +101,12 @@
             </div>
         </div>
 
+        <i id="user-id" value="${currentSessionUser.getUser_id()}"></i>
         <!-- script references -->
         <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="js/home.js"></script>
+        <script src="js/sweetalert.min.js"></script>
         <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
     </body>
 </html>

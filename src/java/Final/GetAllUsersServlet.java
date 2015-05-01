@@ -8,8 +8,11 @@ package Final;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,16 +38,21 @@ public class GetAllUsersServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<String> list = new ArrayList<String>();
-        list.add("item1");
-        list.add("item2");
-        list.add("item3");
-        String json = new Gson().toJson(list);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            //out.println(message);
-            out.println(json);
+        try {
+            List<UserBean> userlist = UserDAO.getAllUser(Integer.parseInt(request.getParameter("user_id")));
+            for (UserBean ub : userlist) {
+                list.add(ub.getName());
+            }
+            String json = new Gson().toJson(list);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try (PrintWriter out = response.getWriter()) {
+                out.println(json);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GetAllUsersServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -7,8 +7,10 @@ package Final;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,36 +18,24 @@ import java.sql.Timestamp;
  */
 public class UserDAO {
 
-    static Connection currentCon = null;
     static ResultSet rs = null;
 
     public static UserBean login(UserBean bean) {
-
-        //preparing some objects for connection 
-        Statement stmt = null;
-
         String username = bean.getUsername();
         String password = bean.getPassword();
-
         String searchQuery
                 = "select * from Users where username='"
                 + username
                 + "' AND password='"
                 + password
                 + "'";
-
-        // "System.out.println" prints in the console; Normally used to trace the process
-        System.out.println("Your user name is " + username);
-        System.out.println("Your password is " + password);
-        System.out.println("Query: " + searchQuery);
-
         try {
-            //connect to DB 
-            currentCon = ConnectionManager.getConnection();
-            stmt = currentCon.createStatement();
-            rs = stmt.executeQuery(searchQuery);
-            boolean more = rs.next();
-
+            
+            MyConnectionManager.getConnection();
+            boolean more=MyConnectionManager.excute(searchQuery);
+            rs=MyConnectionManager.getRs();
+            
+            
             // if user does not exist set the isValid variable to false
             if (!more) {
                 System.out.println("Sorry, you are not a registered user! Please sign up first");
@@ -53,42 +43,15 @@ public class UserDAO {
             } //if user exists set the isValid variable to true
             else if (more) {
                 String name = rs.getString("name");
-                Timestamp create_time = rs.getTimestamp("create_time");
-
-                System.out.println("Welcome " + name);
                 bean.setName(name);
+                bean.setUser_id(rs.getInt("user_id"));
                 bean.setValid(true);
             }
+            MyConnectionManager.closeConnection();
         } catch (Exception ex) {
             System.out.println("Log In failed: An Exception has occurred! " + ex);
         } //some exception handling
-        finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception e) {
-                }
-                rs = null;
-            }
-
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception e) {
-                }
-                stmt = null;
-            }
-
-            if (currentCon != null) {
-                try {
-                    currentCon.close();
-                } catch (Exception e) {
-                }
-
-                currentCon = null;
-            }
-        }
-
+    
         return bean;
 
     }
@@ -97,7 +60,7 @@ public class UserDAO {
 //        
 //    } 
 
-    public static boolean register(UserBean bean) {
+    public static boolean register(UserBean bean) throws SQLException {
 
         //preparing some objects for connection 
         Statement stmt = null;
@@ -106,63 +69,36 @@ public class UserDAO {
         String password = bean.getPassword();
         String name = bean.getName();
         boolean result = false;
-        String searchQuery
+        String insertQuery
                 = "insert into Users(username,password,name) values('"
                 + username + "','"
                 + password + "','"
                 + name + "')";
-
-        // "System.out.println" prints in the console; Normally used to trace the process
-        System.out.println("Your user name is " + username);
-        System.out.println("Your password is " + password);
-        System.out.println("Your name is " + name);
-        System.out.println("Query: " + searchQuery);
-
-        try {
             //connect to DB 
-            currentCon = ConnectionManager.getConnection();
-            stmt = currentCon.createStatement();
-            int affectedRow = stmt.executeUpdate(searchQuery);
-
-            // if user does not exist set the isValid variable to false
-            if (affectedRow != 1) {
-                System.out.println("Sorry, register fail");
-                result = false;
-            } //if user exists set the isValid variable to true
-            else {
-                result = true;
-            }
-        } catch (Exception ex) {
-            System.out.println("Log In failed: An Exception has occurred! " + ex);
-        } //some exception handling
-        finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception e) {
-                }
-                rs = null;
-            }
-
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception e) {
-                }
-                stmt = null;
-            }
-
-            if (currentCon != null) {
-                try {
-                    currentCon.close();
-                } catch (Exception e) {
-                }
-
-                currentCon = null;
-            }
-        }
-
+            MyConnectionManager.getConnection();
+            result=MyConnectionManager.update(insertQuery);
+            MyConnectionManager.closeConnection();
         return result;
-
+    }
+    
+    public static ArrayList<UserBean> getAllUser(int user_id) throws SQLException {
+        ArrayList<UserBean>a=new ArrayList<UserBean>();
+        String searchQuery
+                = "select * from Users where user_id !='"
+                + user_id+"'and user_id not in(select friend_user_id from Friend where accept=1 and user_id='"
+                + user_id+"');";
+        MyConnectionManager.getConnection();
+        MyConnectionManager.excute(searchQuery);
+        ResultSet rs=MyConnectionManager.getRs();
+            while(rs.next()){
+                UserBean ub=new UserBean();
+                ub.setName(rs.getString("name"));
+                ub.setUserName(rs.getString("username"));
+                ub.setUser_id(rs.getInt("user_id"));
+                a.add(ub);
+            }
+        
+        MyConnectionManager.closeConnection();
+        return a;
     }
 }
