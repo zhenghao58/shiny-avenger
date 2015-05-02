@@ -5,6 +5,8 @@
  */
 package Final;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author apple
@@ -16,7 +18,7 @@ public class UserBean implements java.io.Serializable {
     private int user_id;
     private String name;
     private boolean valid;
-
+    private Timestamp create_time;
     public String getName() {
         return this.name;
     }
@@ -54,6 +56,20 @@ public class UserBean implements java.io.Serializable {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    /**
+     * @return the create_time
+     */
+    public Timestamp getCreate_time() {
+        return create_time;
+    }
+
+    /**
+     * @param create_time the create_time to set
+     */
+    public void setCreate_time(Timestamp create_time) {
+        this.create_time = create_time;
     }
 
 }

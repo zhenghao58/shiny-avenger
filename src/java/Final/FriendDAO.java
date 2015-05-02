@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -18,8 +19,6 @@ import java.util.ArrayList;
  */
 public class FriendDAO {
 
-    static Connection currentCon = null;
-    static ResultSet rs = null;
 
     public static int idByName(String name) throws SQLException {
         
@@ -57,22 +56,26 @@ public class FriendDAO {
 
     public static boolean respond(FriendBean bean, boolean accept) throws SQLException {
         int user_id = bean.getUser_id();
-        int friend_id = bean.getFriend_id();
+        int friend_user_id = bean.getFriend_user_id();
         String acceptQuery
-                = "update Friend set accept=1 where friend_id='"
-                + friend_id + "';insert Friend(user_id,friend_id,accept) values("
-                + friend_id + "','"
+                = "update Friend set accept=1 where user_id="
+                +user_id+" and friend_user_id="
+                + friend_user_id + ";";
+        String acceptQuery2 = "insert into Friend(user_id,friend_user_id,accept) values("
+                + friend_user_id + ","
                 + user_id + ",1);";
+        System.out.println(acceptQuery + " "+acceptQuery2);
         String refuseQuery
-                = "delete from Friend where friend_id='"
-                + friend_id + "';";
+                = "delete from Friend where user_id="
+                +user_id+" and friend_user_id="
+                + friend_user_id + ";";
         boolean result = false;
         //connect to DB 
         MyConnectionManager.getConnection();
         if (accept) {
-            result = MyConnectionManager.excute(acceptQuery);
+            result = MyConnectionManager.update(acceptQuery) && MyConnectionManager.update(acceptQuery2);
         } else {
-            result = MyConnectionManager.excute(refuseQuery);
+            result = MyConnectionManager.update(refuseQuery);
         }
         MyConnectionManager.closeConnection();
 
@@ -99,4 +102,42 @@ public class FriendDAO {
         MyConnectionManager.closeConnection();
         return a;
     }
+    
+    public static ArrayList<UserBean> searchAllRequest(int user_id) throws SQLException {
+           String createView=
+                 "create view temp as (select user_id,request_at from Friend where accept=0 and friend_user_id="
+                + user_id + ");";
+           String searchQuery="select u.name,u.username,u.user_id,temp.request_at  from temp left join Users u on u.user_id=temp.user_id;"; 
+           String dropView="drop view temp;";
+                
+        ArrayList<UserBean> a = new ArrayList<UserBean>();
+        MyConnectionManager.getConnection();
+        MyConnectionManager.update(createView);
+        boolean result = MyConnectionManager.excute(searchQuery);
+        ResultSet rs = MyConnectionManager.getRs();
+        HashSet<Integer> set=new HashSet();
+        while (rs.next()) {
+            int userId=rs.getInt("user_id");
+            if(!set.contains(userId)){
+                set.add(userId);
+                UserBean ub = new UserBean();
+                ub.setName(rs.getString("name"));
+                ub.setUserName(rs.getString("username"));
+                ub.setUser_id(rs.getInt("user_id"));
+                ub.setCreate_time(rs.getTimestamp("request_at"));
+                a.add(ub);
+            }
+        }
+        if(!result) System.out.println("No request list yet!");
+        MyConnectionManager.update(dropView);
+        MyConnectionManager.closeConnection();
+        return a;
+    }
+    
+    
+    
+    
+    
+    
+    
 }

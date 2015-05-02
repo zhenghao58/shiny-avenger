@@ -7,8 +7,11 @@ package Final;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,7 +48,7 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("servletName", "servletToJsp");
                 HttpSession session = request.getSession(true);
                 session.setAttribute("currentSessionUser", user);
-                request.setAttribute("requestList", getRequestUsers());
+                request.setAttribute("requestList", getRequestUsers(user.getUser_id()));
                 request.getRequestDispatcher("home.jsp").forward(request, response);
             } else {
                 String message = "Unknown username/password. Please retry.";
@@ -70,11 +73,12 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if (((HttpServletRequest) request).getSession().getAttribute("currentSessionUser") == null) {
-            System.out.println(request.getContextPath() + "\n" + request.getServletPath());
+            System.out.println(request.getContextPath() + " + " + request.getServletPath());
             response.sendRedirect("index.jsp");
         } else {
-            request.setAttribute("requestList", getRequestUsers());
-            System.out.println("Loging using Get!");
+            int user_id = ((UserBean) request.getSession().getAttribute("currentSessionUser")).getUser_id();
+            request.setAttribute("requestList", getRequestUsers(user_id));
+            System.out.println("Loging using Get! " + user_id);
             request.getRequestDispatcher("home.jsp").include(request, response);
         }
     }
@@ -93,16 +97,33 @@ public class LoginServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    private static List<UserBean> getRequestUsers() {
-        UserBean ub1 = new UserBean();
-        ub1.setUser_id(2);
-        ub1.setName("Hao Zheng");
-        UserBean ub2 = new UserBean();
-        ub2.setUser_id(4);
-        ub2.setName("Tom");
+    private static List<UserBean> getRequestUsers(int user_id) {
+
+//
+//            UserBean ub1 = new UserBean();
+//            ub1.setUser_id(6);
+//            ub1.setName("David");
+//            UserBean ub2 = new UserBean();
+//            ub2.setUser_id(8);
+//            ub2.setName("Adam");
+//            UserBean ub3 = new UserBean();
+//            ub3.setUser_id(4);
+//            ub3.setName("Tom");
+//            UserBean ub4 = new UserBean();
+//            ub4.setUser_id(3);
+//            ub4.setName("Jack");
         List<UserBean> requestList = new ArrayList<>();
-        requestList.add(ub1);
-        requestList.add(ub2);
+        try {
+            //            requestList.add(ub1);
+//            requestList.add(ub2);
+//            requestList.add(ub3);
+//            requestList.add(ub4);
+//            return requestList;
+            requestList = FriendDAO.searchAllRequest(user_id);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(requestList);
         return requestList;
     }
 

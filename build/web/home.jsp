@@ -93,7 +93,17 @@
                         <div class="modal-footer">
                             <div>
                                 <button id="status-submit" class="btn btn-primary btn-sm" data-dismiss="modal" aria-hidden="true">Post</button>
-                                <ul class="pull-left list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>
+                                <ul class="pull-left list-inline">
+                                    <li>
+                                        <div class="fileUpload btn btn-primary btn-sm">
+                                            <span>Upload</span>
+                                            <input type="file" class="upload" />
+                                        </div>
+                                    </li>
+                                    <!--                                     <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>
+                                                                        <li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li>
+                                                                        <li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li> -->
+                                </ul>
                             </div>	
                         </div>
                     </form>

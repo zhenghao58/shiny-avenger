@@ -39,21 +39,27 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
             closeOnConfirm: false
         }, function () {
             $.post(contextPath + '/api/request', {friend_name: $('#search-friend').val().trim(), user_id: id}, function (data) {
-                if (data === 'true')
-                    swal('Sent!', '', 'success');
-                else
-                    swal('Error!', 'Server Error', 'error');
-                console.log(data);
+                if (data === 'true') swal('Sent!', '', 'success');
+                else swal('Error!', 'Server Error', 'error');
             });
         });
     });
 
-    $(".dropdown-alerts button.btn-info").click(function () {
-        var $user_id = $(this).val()
-        var $item = $('ul.dropdown-alerts li[value='+$user_id+']');
-        $item.hide('slow');
-        $item.next('.divider').hide('slow');
+    $(".dropdown-alerts button.btn-circle").click(function (event) {
+        event.stopPropagation();
+        var friend_user_id = $(this).val()
+        var $item = $('ul.dropdown-alerts li[value=' + friend_user_id + ']');
+        var accept = $(this).attr('rel');
+        $.post(contextPath + '/api/respond', {friend_user_id: friend_user_id, user_id: id, accept: accept}, function (data) {
+            if(data=='true'){
+                $item.hide('slow');
+                $item.next('.divider').hide('slow');
+            }else swal('Error!', 'Server Error', 'error');
+        });
+        // $item.hide('slow');
+        // $item.next('.divider').hide('slow');
     });
+
 
     $.getJSON(contextPath + '/api/getAllUsers', {user_id: id}, function (data) {
         var allUsers = new Bloodhound({

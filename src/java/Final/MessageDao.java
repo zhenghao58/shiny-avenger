@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class MessageDao {
 
-    static ResultSet rs = null;
+    //static ResultSet rs = null;
 
     public static boolean post(MessageBean bean) throws SQLException {
         String text = bean.getText();
@@ -39,12 +39,12 @@ public class MessageDao {
     }
 
     public static ArrayList<MessageBean> search(int user_id) throws SQLException {
-        ArrayList<MessageBean> a = new ArrayList<MessageBean>();
-        String searchQuery = "select * from Message where user_id='"
+        ArrayList<MessageBean> a = new ArrayList<>();
+        String searchQuery = "select * from Messages where user_id='"
                 + user_id + "';";
 
         MyConnectionManager.getConnection();
-        boolean result = MyConnectionManager.excute(searchQuery);
+        MyConnectionManager.excute(searchQuery);
         ResultSet rs = MyConnectionManager.getRs();
         while (rs.next()) {
             MessageBean ub = new MessageBean();
@@ -54,8 +54,43 @@ public class MessageDao {
             ub.setTime(rs.getTimestamp("time"));
             a.add(ub);
         }
-
         MyConnectionManager.closeConnection();
+        return a;
+    }
+    
+    public static boolean visible(MessageBean mb,int user_id) throws SQLException{
+        String privacy=mb.getPrivacy();
+        boolean result=false;
+        if(privacy=="PUBLIC" || privacy=="FRIEND")
+            result=true;
+        else if(privacy=="PRIVATE")
+            result=false;
+        else {
+            String saerchQuery=
+                    "select * from Circle_friend where circle_id='"
+                    +mb.getCicle_id()+"' and user_id='"
+                    +user_id+"';";
+            MyConnectionManager.getConnection();
+            MyConnectionManager.excute(saerchQuery);
+            result=MyConnectionManager.getRs().next();
+        }
+        return result;
+    }
+    
+    
+    public static ArrayList<MessageBean> searchAll(int user_id) throws SQLException {
+        ArrayList<MessageBean> a = new ArrayList<MessageBean>();
+        
+        //search the friendList
+        ArrayList<UserBean> uba = FriendDAO.searchAllFrind(user_id);
+        for(UserBean ub:uba){
+            //for each friend, search his own messageList
+            ArrayList<MessageBean>mba=MessageDao.search(ub.getUser_id());
+            for(MessageBean mb:mba){
+                //for each of this message, check its visibility to the user_id
+                if(visible(mb,user_id))a.add(mb);
+            }
+        }
         return a;
     }
 

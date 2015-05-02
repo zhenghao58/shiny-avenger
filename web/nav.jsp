@@ -52,10 +52,10 @@
 
                                         <span class="pull-right text-muted">4 minutes ago</span>
                                         <div class="friend-request-btn">
-                                            <button type="button" class="btn btn-info btn-circle" value="${row.getUser_id()}">
+                                            <button type="button" class="btn btn-info btn-circle" rel="true" value="${row.getUser_id()}">
                                                 <i class="fa fa-check"></i>
                                             </button>
-                                            <button type="button" class="btn btn-warning btn-circle pull-right" value="${row.getUser_id()}">
+                                            <button type="button" class="btn btn-warning btn-circle pull-right" rel="false" value="${row.getUser_id()}">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </div>
