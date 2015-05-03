@@ -59,8 +59,7 @@
 
     <!-- main col right -->
     <div class="col-sm-7">
-
-        <div class="well"> 
+        <div class="well" id="search-friend-well"> 
             <form class="form" id="search-friend-form">
                 <h4>Find some friends</h4>
                 <div class="input-group text-center">
@@ -71,20 +70,8 @@
                 </div>
             </form>
         </div>
-        <c:forEach items="${messageList}" var="row" varStatus="loop">
-            <c:set var="messageIndex" value="${loop.index}" />
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <a href="#" class="pull-right">View all</a> 
-                    <h4>${nameList.get(messageIndex)}</h4>
-                </div>
-                <div class="panel-body">
-                    <p><c:out value="${row.getText()}"/></p>       
-                    <div class="clearfix"></div>
-                    <hr> 
-                </div>
-            </div>
-        </c:forEach>
+        <div id="messages" style="display:none">
+        </div>
 
         <div class="panel panel-default">
             <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Stackoverflow</h4></div>

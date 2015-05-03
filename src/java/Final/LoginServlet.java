@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,12 +36,12 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static HttpServletRequest setRequest(HttpServletRequest request, int user_id) {
-        List<MessageBean> messages = getAllMessage(user_id);
-        List<String> names = getNameByMessage(messages);
+//        List<MessageBean> messages = getAllMessage(user_id);
+//        List<String> names = getNameByMessage(messages);
         List<CircleBean> circles = CircleDAO.search(user_id);
         request.setAttribute("requestList", getRequestUsers(user_id));
-        request.setAttribute("messageList", messages);
-        request.setAttribute("nameList", names);
+//        request.setAttribute("messageList", messages);
+//        request.setAttribute("nameList", names);
         request.setAttribute("circleList", circles);
         return request;
     }
@@ -61,7 +60,7 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("servletName", "servletToJsp");
                 HttpSession session = request.getSession(true);
                 session.setAttribute("currentSessionUser", user);
-//                request = setRequest(request, user_id);
+                request = setRequest(request, user_id);
                 request.getRequestDispatcher("home.jsp").forward(request, response);
             } else {
                 String message = "Unknown username/password. Please retry.";
@@ -88,26 +87,9 @@ public class LoginServlet extends HttpServlet {
         if (((HttpServletRequest) request).getSession().getAttribute("currentSessionUser") == null) {
             System.out.println(request.getContextPath() + " + " + request.getServletPath());
             response.sendRedirect("index.jsp");
-        } else {
-            List<MessageBean>l;
-            try {
-                l = MessageDAO.searchAll(15);
-                for(MessageBean mb:l)
-                System.out.println(mb.getText());
-            } catch (SQLException ex) {
-                Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-            
-            
-            
-            
-            
-            
-            
+        } else {    
             int user_id = ((UserBean) request.getSession().getAttribute("currentSessionUser")).getUser_id();
-//            request = setRequest(request, user_id);
+            request = setRequest(request, user_id);
             System.out.println("Loging using Get! " + user_id);
             request.getRequestDispatcher("home.jsp").include(request, response);
         }
@@ -152,7 +134,6 @@ public class LoginServlet extends HttpServlet {
         for (MessageBean mb : mbList) {
             try {
                 int user_id = mb.getUser_id();
-                System.out.println(user_id);
                 list.add(UserDAO.NameById(user_id));
             } catch (SQLException ex) {
                 Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);

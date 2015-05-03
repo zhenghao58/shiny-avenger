@@ -23,13 +23,13 @@ public class MessageDAO {
     public static boolean post(MessageBean bean) throws SQLException {
         String text = bean.getText();
 //        int location_id=bean.getLocation_id();
-        int circle_id = bean.getCicle_id();
+        int circle_id = bean.getCircle_id();
         int user_id = bean.getUser_id();
         String privacy = bean.getPrivacy();
         boolean result = false;
         String insertQuery;
         if (circle_id == 0) {
-            insertQuery = "insert into Messages(text, user_id, circle_id, privacy) values('"
+            insertQuery = "insert into Messages(text, user_id, privacy) values('"
                     + text + "',"
                     + user_id + ",'"
                     + privacy + "');";
@@ -41,7 +41,6 @@ public class MessageDAO {
                     + privacy + "');";
         }
         //connect to DB 
-        System.out.println(insertQuery);
         MyConnectionManager.getConnection();
         result = MyConnectionManager.update(insertQuery);
         MyConnectionManager.closeConnection();
@@ -60,11 +59,14 @@ public class MessageDAO {
             MessageBean ub = new MessageBean();
             ub.setPrivacy(rs.getString("privacy"));
             ub.setText(rs.getString("text"));
-            ub.setMessage_id(Integer.parseInt(rs.getString("message_id")));
+            ub.setMessage_id(rs.getInt("message_id"));
+            ub.setCircle_id(rs.getInt("Circle_id"));
             ub.setTime(rs.getTimestamp("time"));
-            ub.setUser_id(rs.getInt("user_id"));
+            ub.setUser_id(user_id);
+            ub.setUser_name(UserDAO.NameById(user_id));
             a.add(ub);
         }
+        
         MyConnectionManager.closeConnection();
         return a;
     }
@@ -77,12 +79,12 @@ public class MessageDAO {
         } else if (privacy.equals("private")) {
             result = false;
         } else {
-            String saerchQuery
+            String searchQuery
                     = "select * from Circle_friend where circle_id="
-                    + mb.getCicle_id() + " and user_id="
+                    + mb.getCircle_id() + " and user_id="
                     + user_id + ";";
             MyConnectionManager.getConnection();
-            MyConnectionManager.excute(saerchQuery);
+            MyConnectionManager.excute(searchQuery);
             result = MyConnectionManager.getRs().next();
         }
         return result;
@@ -92,6 +94,9 @@ public class MessageDAO {
         //add user_id's messages
         List<MessageBean> a = new ArrayList<>();
         a = search(user_id);
+//        System.out.println("own");
+//        for(MessageBean mb:a)
+//                System.out.println(mb.getText());
         //search the friendList
         ArrayList<UserBean> uba = FriendDAO.searchAllFrind(user_id);
 
@@ -107,6 +112,9 @@ public class MessageDAO {
                 }
             }
         }
+//        System.out.println("own+friend");
+//        for(MessageBean mb:a)
+//                System.out.println(mb.getText());
         //add all users' messages with public privacy
         String addQuery = "select * from Messages where privacy='public'";
         MyConnectionManager.getConnection();
@@ -125,10 +133,15 @@ public class MessageDAO {
                 ub.setText(rs.getString("text"));
                 ub.setMessage_id(Integer.parseInt(rs.getString("message_id")));
                 ub.setTime(rs.getTimestamp("time"));
-                ub.setUser_id(rs.getInt("user_id"));
+                int message_user_id = rs.getInt("user_id");
+                ub.setUser_id(message_user_id);
+                ub.setUser_name(UserDAO.NameById(message_user_id));
                 a.add(ub);
             }
         }
+//        System.out.println("all");
+//        for(MessageBean mb:a)
+//                System.out.println(mb.getText());
         MyConnectionManager.closeConnection();
         a.sort(new Comparator<MessageBean>() {
             @Override

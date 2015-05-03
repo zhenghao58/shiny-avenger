@@ -12,13 +12,14 @@ import java.sql.Timestamp;
  * @author 睿
  */
 public class MessageBean {
-    private int message_id;
-    private String text;
-    private Timestamp time;
-    private int location_id;
-    private int cicle_id;
-    private int user_id;
-    private String privacy;
+    public int message_id;
+    public String text;
+    public Timestamp time;
+    public int location_id;
+    public int circle_id;
+    public int user_id;
+    public String privacy;
+    public String user_name;
     /**
      * @return the privacy
      */
@@ -95,15 +96,15 @@ public class MessageBean {
     /**
      * @return the cicle_id
      */
-    public int getCicle_id() {
-        return cicle_id;
+    public int getCircle_id() {
+        return circle_id;
     }
 
     /**
      * @param cicle_id the cicle_id to set
      */
-    public void setCicle_id(int cicle_id) {
-        this.cicle_id = cicle_id;
+    public void setCircle_id(int cicle_id) {
+        this.circle_id = cicle_id;
     }
 
     /**
@@ -118,6 +119,20 @@ public class MessageBean {
      */
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    /**
+     * @return the user_name
+     */
+    public String getUser_name() {
+        return user_name;
+    }
+
+    /**
+     * @param user_name the user_name to set
+     */
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
     /**

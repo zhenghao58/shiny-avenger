@@ -35,9 +35,7 @@
                     <i class="glyphicon glyphicon-user"></i> ${sessionScope.currentSessionUser.getName()}
                 </a>
                 <ul class="dropdown-menu">
-                    <c:forEach begin="0" end="4">
-                       <li><a href="">More</a></li> 
-                    </c:forEach>
+                    <li><a href="">Logout</a></li> 
                 </ul>
             </li>
             <li class="dropdown">

@@ -36,8 +36,8 @@
                         </ul>
 
                         <ul class="nav hidden-xs" id="lg-menu">
-                            <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> Featured</a></li>
-                            <li><a href="#stories"><i class="glyphicon glyphicon-list"></i> Stories</a></li>
+                            <li class="active"><a href=""><i class="glyphicon glyphicon-list-alt"></i> Home</a></li>
+                            <li><a href="#friends"><i class="glyphicon glyphicon-list"></i> Friends</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> Saved</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-refresh"></i> Refresh</a></li>
                         </ul>
@@ -49,8 +49,8 @@
 
                         <!-- tiny only nav-->
                         <ul class="nav visible-xs" id="xs-menu">
-                            <li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
-                            <li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
+                            <li><a href="" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
+                            <li><a href="#friends" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
                             <li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
                             <li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
                         </ul>
@@ -91,13 +91,13 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <div>
+                            <div>    
                                 <button id="status-submit" class="btn btn-primary btn-sm" data-dismiss="modal" aria-hidden="true">Post</button>
                                 <ul class="pull-left list-inline">
                                     <li>
                                         <div class="fileUpload btn btn-primary btn-sm">
                                             <span>Upload Photo</span>
-                                            <input type="file" class="upload" />
+                                            <input type="file" class="upload" id="uploadBtn" />
                                         </div>
                                     </li>
                                     <!--                                     <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>
@@ -120,7 +120,7 @@
                                         </select>
                                     </li>
                                 </ul>
-                            </div>	
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -128,6 +128,8 @@
         </div>
 
         <i id="user-id" value="${currentSessionUser.getUser_id()}"></i>
+        <i id="user-true-name" value="${sessionScope.currentSessionUser.getName()}"></i>
+        
         <!-- script references -->
         <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>

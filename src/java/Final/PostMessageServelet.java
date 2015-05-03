@@ -40,7 +40,7 @@ public class PostMessageServelet extends HttpServlet {
         int requestId = Integer.parseInt(request.getParameter("user_id"));
         bean.setUser_id(requestId);
         bean.setPrivacy(request.getParameter("privacy"));
-        bean.setCicle_id(Integer.parseInt(request.getParameter("circle_id")));
+        bean.setCircle_id(Integer.parseInt(request.getParameter("circle_id")));
         String message="false";
         try {
             boolean success = MessageDAO.post(bean);
