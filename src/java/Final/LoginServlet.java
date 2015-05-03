@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("servletName", "servletToJsp");
                 HttpSession session = request.getSession(true);
                 session.setAttribute("currentSessionUser", user);
-                request = setRequest(request, user_id);
+//                request = setRequest(request, user_id);
                 request.getRequestDispatcher("home.jsp").forward(request, response);
             } else {
                 String message = "Unknown username/password. Please retry.";
@@ -89,8 +89,25 @@ public class LoginServlet extends HttpServlet {
             System.out.println(request.getContextPath() + " + " + request.getServletPath());
             response.sendRedirect("index.jsp");
         } else {
+            List<MessageBean>l;
+            try {
+                l = MessageDAO.searchAll(15);
+                for(MessageBean mb:l)
+                System.out.println(mb.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
             int user_id = ((UserBean) request.getSession().getAttribute("currentSessionUser")).getUser_id();
-            request = setRequest(request, user_id);
+//            request = setRequest(request, user_id);
             System.out.println("Loging using Get! " + user_id);
             request.getRequestDispatcher("home.jsp").include(request, response);
         }
