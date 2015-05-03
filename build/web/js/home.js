@@ -17,8 +17,9 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
             var $panelWrapper = $('<div class="panel panel-default">').appendTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">' + message.time + '</a><h4>' + message.user_name + '</h4>'));
             $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + message.text + '</p><div class="clearFix"></div><hr>');
         });
-        $('#messages').show('slow');
+        $('#messages').fadeIn('slow');
     });
+
 
     $("button#status-submit").click(function () {
         var privacy = $('#selectPrivacy').val().toLowerCase();
@@ -36,13 +37,24 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 $('form#status textarea').val('');
                 var $panelWrapper = $('<div class="panel panel-default" style="display:none">').prependTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + name + '</h4>'));
                 $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
-                $panelWrapper.show('slow');
+                $panelWrapper.fadeIn(1000);
             },
             error: function () {
                 console.log('Post failure!');
             }
         });
+    });
+    
+    $('#friend-view-btn').click(function(event) {
+        $('#main-view').fadeOut(600, function() {
+            $('#friend-view').fadeIn(700);
+        });
+    });
 
+    $('#main-view-btn').click(function(event) {
+        $('#friend-view').fadeOut(600, function() {
+            $('#main-view').fadeIn(700);
+        });
     });
 
     $('#uploadBtn').change(function () {

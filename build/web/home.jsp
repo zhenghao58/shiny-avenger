@@ -15,6 +15,7 @@
         <meta name="generator" content="Bootply" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <!--[if lt IE 9]>
@@ -36,10 +37,10 @@
                         </ul>
 
                         <ul class="nav hidden-xs" id="lg-menu">
-                            <li class="active"><a href=""><i class="glyphicon glyphicon-list-alt"></i> Home</a></li>
-                            <li><a href="#friends"><i class="glyphicon glyphicon-list"></i> Friends</a></li>
+                            <li class="active"><a href="#main-view" id='main-view-btn'><i class="glyphicon glyphicon-list-alt"></i> Home</a></li>
+                            <li><a href="#friend-view" id='friend-view-btn'><i class="glyphicon glyphicon-list"></i> Friends</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> Saved</a></li>
-                            <li><a href="#"><i class="glyphicon glyphicon-refresh"></i> Refresh</a></li>
+                            <li><a href=""><i class="glyphicon glyphicon-refresh"></i> Refresh</a></li>
                         </ul>
                         <ul class="list-unstyled hidden-xs" id="sidebar-footer">
                             <li>
@@ -64,9 +65,12 @@
                         <c:import url="nav.jsp" />
                         <!-- /top nav -->
                         <div class="padding">
-                            <div class="full col-sm-9">
+                            <div class="full col-sm-9" id="main-view">
                                 <c:import url="main.jsp" />
                             </div><!-- /col-9 -->
+                            <div class="full col-sm-9" id="friend-view" style="display:none">
+                                <c:import url="friend.jsp" />
+                            </div>
                         </div><!-- /padding -->
                     </div>
                     <!-- /main -->
@@ -129,11 +133,12 @@
 
         <i id="user-id" value="${currentSessionUser.getUser_id()}"></i>
         <i id="user-true-name" value="${sessionScope.currentSessionUser.getName()}"></i>
-        
+
         <!-- script references -->
         <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="js/home.js"></script>
+        <script src="js/jquery-ui.min.js" type="text/javascript"></script>
         <script src="js/sweetalert.min.js"></script>
         <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
     </body>

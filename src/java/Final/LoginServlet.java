@@ -6,7 +6,6 @@
 package Final;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +35,8 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static HttpServletRequest setRequest(HttpServletRequest request, int user_id) {
-//        List<MessageBean> messages = getAllMessage(user_id);
-//        List<String> names = getNameByMessage(messages);
         List<CircleBean> circles = CircleDAO.search(user_id);
         request.setAttribute("requestList", getRequestUsers(user_id));
-//        request.setAttribute("messageList", messages);
-//        request.setAttribute("nameList", names);
         request.setAttribute("circleList", circles);
         return request;
     }
@@ -119,29 +114,6 @@ public class LoginServlet extends HttpServlet {
         return requestList;
     }
 
-    private static List<MessageBean> getAllMessage(int user_id) {
-        List<MessageBean> l = new ArrayList<>();
-        try {
-            l = MessageDAO.searchAll(user_id);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return l;
-    }
-
-    private static List<String> getNameByMessage(List<MessageBean> mbList) {
-        List<String> list = new ArrayList<>();
-        for (MessageBean mb : mbList) {
-            try {
-                int user_id = mb.getUser_id();
-                list.add(UserDAO.NameById(user_id));
-            } catch (SQLException ex) {
-                Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-                list.add("error name");
-            }
-        }
-        return list;
-    }
 
     /**
      * Returns a short description of the servlet.

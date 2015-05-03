@@ -32,7 +32,6 @@ public class FriendDAO {
         ResultSet rs=MyConnectionManager.getRs();
         rs.next();
         int user_id = rs.getInt("user_id");
-        System.out.println(user_id);
         MyConnectionManager.closeConnection();
         return user_id;
     }
@@ -57,7 +56,6 @@ public class FriendDAO {
                 = "insert into Friend(user_id,friend_user_id) values('"
                 + user_id + "','"
                 + friend_user_id + "');";
-        System.out.println(insertQuery);
         //connect to DB 
         MyConnectionManager.getConnection();
         result = MyConnectionManager.update(insertQuery);
@@ -75,7 +73,6 @@ public class FriendDAO {
         String acceptQuery2 = "insert into Friend(user_id,friend_user_id,accept) values("
                 + friend_user_id + ","
                 + user_id + ",1);";
-        System.out.println(acceptQuery + " "+acceptQuery2);
         String refuseQuery
                 = "delete from Friend where user_id="
                 +user_id+" and friend_user_id="
