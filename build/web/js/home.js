@@ -97,8 +97,6 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
             } else
                 swal('Error!', 'Server Error', 'error');
         });
-        // $item.hide('slow');
-        // $item.next('.divider').hide('slow');
     });
 
 
@@ -126,8 +124,4 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         } else
             $('#selectCircle').attr('disabled', 'disabled');
     });
-
-
-
-
 });
