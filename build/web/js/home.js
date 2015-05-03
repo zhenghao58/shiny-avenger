@@ -12,13 +12,15 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     });
 
     $("button#status-submit").click(function () {
+        var privacy = $('#selectPrivacy').val().toLowerCase();
         $.ajax({
             type: "POST",
             url: contextPath + '/api/postMessage',
             data: {
                 text: $('form#status textarea').val(),
                 user_id: id,
-                privacy: "public"
+                privacy: privacy,
+                circle_id: privacy==='circle' ? $('#selectCircle').val() : 0
             },
             success: function (msg) {
                 $('form#status textarea').val('');
@@ -78,6 +80,12 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
             source: allUsers
         });
     });
+
+    $('#selectPrivacy').change(function() {
+        if($(this).val()=="Circle"){
+            $('#selectCircle').removeAttr('disabled');
+        }else $('#selectCircle').attr('disabled', 'disabled');
+    })
 
 
 

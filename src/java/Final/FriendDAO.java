@@ -36,6 +36,17 @@ public class FriendDAO {
         MyConnectionManager.closeConnection();
         return user_id;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     public static boolean request(String friend_name, int user_id) throws SQLException {
         FriendBean bean = new FriendBean();
@@ -85,8 +96,8 @@ public class FriendDAO {
 
     public static ArrayList<UserBean> searchAllFrind(int user_id) throws SQLException {
         String searchQuery
-                = "select * from Users where user_id in(select friend_user_id from Friend where accept=1 and user_id='"
-                + user_id + "');";
+                = "select * from Users where user_id in(select friend_user_id from Friend where accept=1 and user_id="
+                + user_id + ");";
         ArrayList<UserBean> a = new ArrayList<UserBean>();
         MyConnectionManager.getConnection();
         boolean result = MyConnectionManager.excute(searchQuery);

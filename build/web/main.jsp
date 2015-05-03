@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- content -->                      
 <div class="row">
 
@@ -9,7 +10,6 @@
             <div class="panel-body">
                 <p class="lead">Urbanization</p>
                 <p>45 Followers, 13 Posts</p>
-
                 <p>
                     <img src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s28" width="28px" height="28px">
                 </p>
@@ -39,11 +39,11 @@
         </div>
 
         <div class="panel panel-default">
-            <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>More Templates</h4></div>
+            <div class="panel-heading"><a href="#" class="pull-right">Boot</a> <h4>Hola</h4></div>
             <div class="panel-body">
                 <img src="//placehold.it/150x150" class="img-circle pull-right"> <a href="#">Free @Bootply</a>
                 <div class="clearfix"></div>
-                There a load of new free Bootstrap 3 ready templates at Bootply. All of these templates are free and don't require extensive customization to the Bootstrap baseline.
+                Bootstrap is front end frameworkto build custom web applications that are fast.
                 <hr>
                 <ul class="list-unstyled"><li><a href="#">Dashboard</a></li><li><a href="#">Darkside</a></li><li><a href="#">Greenfield</a></li></ul>
             </div>
@@ -71,16 +71,20 @@
                 </div>
             </form>
         </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Bootply Editor &amp; Code Library</h4></div>
-            <div class="panel-body">
-                <p><img src="//placehold.it/150x150" class="img-circle pull-right"> <a href="#">The Bootstrap Playground</a></p>
-                <div class="clearfix"></div>
-                <hr>
-                Design, build, test, and prototype using Bootstrap in real-time from your Web browser. Bootply combines the power of hand-coded HTML, CSS and JavaScript with the benefits of responsive design using Bootstrap. Find and showcase Bootstrap-ready snippets in the 100% free Bootply.com code repository.
+        <c:forEach items="${messageList}" var="row" varStatus="loop">
+            <c:set var="messageIndex" value="${loop.index}" />
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#" class="pull-right">View all</a> 
+                    <h4>${nameList.get(messageIndex)}</h4>
+                </div>
+                <div class="panel-body">
+                    <p><c:out value="${row.getText()}"/></p>       
+                    <div class="clearfix"></div>
+                    <hr> 
+                </div>
             </div>
-        </div>
+        </c:forEach>
 
         <div class="panel panel-default">
             <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Stackoverflow</h4></div>
@@ -105,22 +109,10 @@
         </div>
 
         <div class="panel panel-default">
-            <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Portlet Heading</h4></div>
-            <div class="panel-body">
-                <ul class="list-group">
-                    <li class="list-group-item">Modals</li>
-                    <li class="list-group-item">Sliders / Carousel</li>
-                    <li class="list-group-item">Thumbnails</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="panel panel-default">
             <div class="panel-thumbnail"><img src="img/bg_4.jpg" class="img-responsive"></div>
             <div class="panel-body">
                 <p class="lead">Social Good</p>
                 <p>1,200 Followers, 83 Posts</p>
-                <p>${sessionScope.currentSessionUser.getUsername()}</p>
                 <p>
                     <img src="https://lh6.googleusercontent.com/-5cTTMHjjnzs/AAAAAAAAAAI/AAAAAAAAAFk/vgza68M4p2s/s28-c-k-no/photo.jpg" width="28px" height="28px">
                     <img src="https://lh4.googleusercontent.com/-6aFMDiaLg5M/AAAAAAAAAAI/AAAAAAAABdM/XjnG8z60Ug0/s28-c-k-no/photo.jpg" width="28px" height="28px">

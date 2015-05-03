@@ -76,6 +76,40 @@ public class UserDAO {
         return result;
     }
     
+    public static int idByName(String name) throws SQLException {
+        
+        String searchQuery
+                = "select * from Users where name='"
+                + name + "';";
+        //connect to DB 
+        
+        MyConnectionManager.getConnection();
+        MyConnectionManager.excute(searchQuery);
+        ResultSet rs=MyConnectionManager.getRs();
+        rs.next();
+        int user_id = rs.getInt("user_id");
+        MyConnectionManager.closeConnection();
+        return user_id;
+    }
+    
+    public static String NameById(int user_id) throws SQLException {
+        
+        String searchQuery
+                = "select * from Users where user_id="
+                + user_id + ";";
+        //connect to DB 
+        
+        MyConnectionManager.getConnection();
+        MyConnectionManager.excute(searchQuery);
+        ResultSet rs=MyConnectionManager.getRs();
+        rs.next();
+        String name = rs.getString("name");
+        System.out.println(name);
+        MyConnectionManager.closeConnection();
+        return name;
+    }
+    
+    
     public static ArrayList<UserBean> getAllUser(int user_id) throws SQLException {
         ArrayList<UserBean>a=new ArrayList<UserBean>();
         String searchQuery

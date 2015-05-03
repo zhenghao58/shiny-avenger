@@ -96,13 +96,29 @@
                                 <ul class="pull-left list-inline">
                                     <li>
                                         <div class="fileUpload btn btn-primary btn-sm">
-                                            <span>Upload</span>
+                                            <span>Upload Photo</span>
                                             <input type="file" class="upload" />
                                         </div>
                                     </li>
                                     <!--                                     <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>
                                                                         <li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li>
                                                                         <li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li> -->
+
+                                    <li>
+                                        <select id="selectPrivacy" class="form-control">
+                                            <option>Public</option>
+                                            <option>Friend</option>
+                                            <option>Private</option>
+                                            <option>Circle</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <select id="selectCircle" disabled class="form-control">
+                                            <c:forEach items="${circleList}" var="row">
+                                                <option value="${row.getCircle_id()}">${row.getName()}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </li>
                                 </ul>
                             </div>	
                         </div>

@@ -31,7 +31,9 @@
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-top-links">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i> ${sessionScope.currentSessionUser.getName()}
+                </a>
                 <ul class="dropdown-menu">
                     <c:forEach begin="0" end="4">
                        <li><a href="">More</a></li> 
