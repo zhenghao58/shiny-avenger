@@ -40,7 +40,11 @@
             </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <i class="fa fa-bell fa-fw"></i>
+                    <c:if test="${!requestList.isEmpty()}">
+                        <span class="badge">${requestList.size()}</span>
+                    </c:if>
+                    <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-alerts">
                     <c:forEach items="${requestList}" var="row">

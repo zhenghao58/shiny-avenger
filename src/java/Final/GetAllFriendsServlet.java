@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author apple
  */
-@WebServlet(name = "GetAllMessageServlet", urlPatterns = {"/api/getAllMessages"})
-public class GetAllMessageServlet extends HttpServlet {
+@WebServlet(name = "GetAllFriendsServlet", urlPatterns = {"/api/getAllFriends"})
+public class GetAllFriendsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +43,10 @@ public class GetAllMessageServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet GetAllMessageServlet</title>");
+            out.println("<title>Servlet GetAllFriendsServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet GetAllMessageServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet GetAllFriendsServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,18 +64,29 @@ public class GetAllMessageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<MessageBean> messages = new ArrayList<>();
+
+        List<UserBean> list = new ArrayList<>();
+        int user_id = Integer.parseInt(request.getParameter("user_id"));
         try {
-            messages = MessageDAO.searchAll(Integer.parseInt(request.getParameter("user_id")));
+            list = FriendDAO.searchAllFrind(user_id);
+
         } catch (SQLException ex) {
-            Logger.getLogger(GetAllMessageServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String json = new Gson().toJson(messages);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println(json);
+        if (!list.isEmpty()) {
+            String json = new Gson().toJson(list);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try (PrintWriter out = response.getWriter()) {
+                out.println(json);
+            }
+        } else {
+            response.setContentType("text/html;charset=UTF-8");
+            try (PrintWriter out = response.getWriter()) {
+                out.print("empty");
+            }
         }
+
     }
 
     /**
@@ -89,6 +100,7 @@ public class GetAllMessageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

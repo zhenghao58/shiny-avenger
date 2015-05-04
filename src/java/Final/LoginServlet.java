@@ -38,6 +38,7 @@ public class LoginServlet extends HttpServlet {
         List<CircleBean> circles = CircleDAO.search(user_id);
         request.setAttribute("requestList", getRequestUsers(user_id));
         request.setAttribute("circleList", circles);
+//        request.setAttribute("friendList", getAllFriends(user_id));
         return request;
     }
 
@@ -51,6 +52,8 @@ public class LoginServlet extends HttpServlet {
 
             user = UserDAO.login(user);
             int user_id = user.getUser_id();
+            
+            
             if (user.isValid()) {
                 request.setAttribute("servletName", "servletToJsp");
                 HttpSession session = request.getSession(true);
@@ -113,8 +116,7 @@ public class LoginServlet extends HttpServlet {
         }
         return requestList;
     }
-
-
+    
     /**
      * Returns a short description of the servlet.
      *

@@ -210,13 +210,6 @@ hr {
     filter: alpha(opacity=0);
 }
 
-.friend-request-btn button.pull-right{
-  margin-right: 20px;
-  border: solid 1px #fff;
-  box-shadow: inset 1px 1px 2px 0 #707070;
-  transition: box-shadow 0.3s;
-}
-
 #fileLabel{
   width: 50%;
 }
@@ -355,7 +348,6 @@ input#srch-term{
     text-shadow:0 0 1px rgba(0,0,0,.3);
 }
 
-
 .panel textarea, .well textarea, textarea.form-control
 {
    resize: none;
@@ -364,6 +356,15 @@ input#srch-term{
 .badge{
    color:#3B5999;
    background-color:#fff;
+}
+
+#friend-view .badge{
+  color:#555;
+}
+
+#friend-view .badge:hover, #friend-view .badge-inverse{
+   background-color:#3B5999;
+   color:#fff;
 }
 .badge:hover, .badge-inverse{
    background-color:#3B5999;
@@ -394,26 +395,35 @@ input#srch-term{
     width: 100%;
 }
 
-.modal-header, .modal-footer {
+#postModal .modal-header, #postModal .modal-footer {
 	background-color:#f2f2f2;
     font-weight:800;
     font-size:12px;
 }
 
-.modal-footer i, .well i {
+#postModal .modal-footer i, #postModal .well i {
     font-size:20px;
     color:#c0c0c0;
 }
 
-.modal-body {
+#postModal .modal-body {
 	padding:0px;
 }
 
-.modal-body textarea.form-control
+#postModal .modal-body textarea.form-control
 {
    resize: none;
    border:0;
    box-shadow:0 0 0;
+}
+
+#newCircleModal .modal-footer{
+  border-top: 0px;
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+#newCircleModal .modal-body{
+  padding-bottom: 10px;
 }
 
 small.text-muted {

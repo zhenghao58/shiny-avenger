@@ -29,11 +29,11 @@ public class UserDAO {
                 + password
                 + "'";
         try {
-            
+
             MyConnectionManager.getConnection();
-            boolean more=MyConnectionManager.excute(searchQuery);
-            rs=MyConnectionManager.getRs();
-            
+            boolean more = MyConnectionManager.excute(searchQuery);
+            rs = MyConnectionManager.getRs();
+
             rs.next();
             // if user does not exist set the isValid variable to false
             if (!more) {
@@ -50,11 +50,11 @@ public class UserDAO {
         } catch (Exception ex) {
             System.out.println("Log In failed: An Exception has occurred! " + ex);
         } //some exception handling
-    
+
         return bean;
 
     }
-    
+
     public static boolean register(UserBean bean) throws SQLException {
 
         //preparing some objects for connection 
@@ -69,64 +69,62 @@ public class UserDAO {
                 + username + "','"
                 + password + "','"
                 + name + "')";
-            //connect to DB 
-            MyConnectionManager.getConnection();
-            result=MyConnectionManager.update(insertQuery);
-            MyConnectionManager.closeConnection();
+        //connect to DB 
+        MyConnectionManager.getConnection();
+        result = MyConnectionManager.update(insertQuery);
+        MyConnectionManager.closeConnection();
         return result;
     }
-    
+
     public static int idByName(String name) throws SQLException {
-        
+
         String searchQuery
                 = "select * from Users where name='"
                 + name + "';";
         //connect to DB 
-        
+
         MyConnectionManager.getConnection();
         MyConnectionManager.excute(searchQuery);
-        ResultSet rs=MyConnectionManager.getRs();
+        ResultSet rs = MyConnectionManager.getRs();
         rs.next();
         int user_id = rs.getInt("user_id");
         MyConnectionManager.closeConnection();
         return user_id;
     }
-    
+
     public static String NameById(int user_id) throws SQLException {
-        
+
         String searchQuery
                 = "select * from Users where user_id="
                 + user_id + ";";
         //connect to DB 
-        
+
         MyConnectionManager.getConnection();
         MyConnectionManager.excute(searchQuery);
-        ResultSet rs=MyConnectionManager.getRs();
+        ResultSet rs = MyConnectionManager.getRs();
         rs.next();
         String name = rs.getString("name");
-        System.out.println(name);
         MyConnectionManager.closeConnection();
         return name;
     }
-    
-    
+
     public static ArrayList<UserBean> getAllUser(int user_id) throws SQLException {
-        ArrayList<UserBean>a=new ArrayList<UserBean>();
+        ArrayList<UserBean> a = new ArrayList<UserBean>();
         String searchQuery
                 = "select * from Users where user_id !='"
-                + user_id+"'and user_id not in(select friend_user_id from Friend where accept=1 and user_id='"
-                + user_id+"');";
+                + user_id + "'and user_id not in(select friend_user_id from Friend where accept=1 and user_id='"
+                + user_id + "');";
         MyConnectionManager.getConnection();
         MyConnectionManager.excute(searchQuery);
-        ResultSet rs=MyConnectionManager.getRs();
-            while(rs.next()){
-                UserBean ub=new UserBean();
-                ub.setName(rs.getString("name"));
-                ub.setUserName(rs.getString("username"));
-                ub.setUser_id(rs.getInt("user_id"));
-                a.add(ub);
-            }
-        
+        ResultSet rs = MyConnectionManager.getRs();
+        while (rs.next()) {
+            UserBean ub = new UserBean();
+            ub.setName(rs.getString("name"));
+            ub.setUserName(rs.getString("username"));
+            ub.setUser_id(rs.getInt("user_id"));
+            a.add(ub);
+        }
+
         MyConnectionManager.closeConnection();
         return a;
     }

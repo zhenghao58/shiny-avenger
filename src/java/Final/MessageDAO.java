@@ -51,23 +51,23 @@ public class MessageDAO {
         ArrayList<MessageBean> a = new ArrayList<>();
         String searchQuery = "select * from Messages where user_id="
                 + user_id + ";";
-
-        MyConnectionManager.getConnection();
-        MyConnectionManager.excute(searchQuery);
-        ResultSet rs = MyConnectionManager.getRs();
+        ConnectionManager cm=new ConnectionManager();
+        cm.getConnection();
+        cm.excute(searchQuery);
+        ResultSet rs = cm.getRs();
         while (rs.next()) {
             MessageBean ub = new MessageBean();
             ub.setPrivacy(rs.getString("privacy"));
             ub.setText(rs.getString("text"));
             ub.setMessage_id(rs.getInt("message_id"));
-            ub.setCircle_id(rs.getInt("Circle_id"));
+            ub.setCircle_id(rs.getInt("circle_id"));
             ub.setTime(rs.getTimestamp("time"));
             ub.setUser_id(user_id);
             ub.setUser_name(UserDAO.NameById(user_id));
             a.add(ub);
         }
         
-        MyConnectionManager.closeConnection();
+        cm.closeConnection();
         return a;
     }
 
@@ -83,9 +83,10 @@ public class MessageDAO {
                     = "select * from Circle_friend where circle_id="
                     + mb.getCircle_id() + " and user_id="
                     + user_id + ";";
-            MyConnectionManager.getConnection();
+//            MyConnectionManager.getConnection();
             MyConnectionManager.excute(searchQuery);
             result = MyConnectionManager.getRs().next();
+//            MyConnectionManager.closeConnection();
         }
         return result;
     }
@@ -99,7 +100,7 @@ public class MessageDAO {
 //                System.out.println(mb.getText());
         //search the friendList
         ArrayList<UserBean> uba = FriendDAO.searchAllFrind(user_id);
-
+        MyConnectionManager.getConnection();
         for (UserBean ub : uba) {
             //for each friend, search his own messageList
             ArrayList<MessageBean> mba = MessageDAO.search(ub.getUser_id());
@@ -112,6 +113,8 @@ public class MessageDAO {
                 }
             }
         }
+        MyConnectionManager.closeConnection();
+
 //        System.out.println("own+friend");
 //        for(MessageBean mb:a)
 //                System.out.println(mb.getText());

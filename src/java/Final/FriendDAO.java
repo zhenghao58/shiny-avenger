@@ -36,17 +36,6 @@ public class FriendDAO {
         return user_id;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     public static boolean request(String friend_name, int user_id) throws SQLException {
         FriendBean bean = new FriendBean();
         int friend_user_id = idByName(friend_name);

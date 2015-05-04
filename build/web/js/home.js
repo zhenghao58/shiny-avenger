@@ -24,43 +24,73 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     $("button#status-submit").click(function () {
         var privacy = $('#selectPrivacy').val().toLowerCase();
         var content = $('form#status textarea').val();
-        $.ajax({
-            type: "POST",
-            url: contextPath + '/api/postMessage',
-            data: {
-                text: content,
-                user_id: id,
-                privacy: privacy,
-                circle_id: privacy === 'circle' ? $('#selectCircle').val() : 0
-            },
-            success: function (msg) {
-                $('form#status textarea').val('');
-                var $panelWrapper = $('<div class="panel panel-default" style="display:none">').prependTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + name + '</h4>'));
-                $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
-                $panelWrapper.fadeIn(1000);
-            },
-            error: function () {
-                console.log('Post failure!');
-            }
-        });
+        if(content){
+            $.ajax({
+                type: "POST",
+                url: contextPath + '/api/postMessage',
+                data: {
+                    text: content,
+                    user_id: id,
+                    privacy: privacy,
+                    circle_id: privacy === 'circle' ? $('#selectCircle').val() : 0
+                },
+                success: function (msg) {
+                    $('form#status textarea').val('');
+                    var $panelWrapper = $('<div class="panel panel-default" style="display:none">').prependTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + name + '</h4>'));
+                    $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
+                    $panelWrapper.fadeIn(1000);
+                },
+                error: function () {
+                    console.log('Post failure!');
+                }
+            });
+        }else swal('Error!', 'Message content cannot be empty!', 'error');
     });
     
+
     $('#friend-view-btn').click(function(event) {
-        $('#main-view').fadeOut(600, function() {
-            $('#friend-view').fadeIn(700);
+        $('#main-view').fadeOut(300, function() {
+            $('#friend-view').fadeIn(300);
+        });
+
+        $.get(contextPath+'/api/getAllFriends', {user_id: id}, function(data) {
+            if(data!=='empty'){
+                data.forEach(function(item){
+                    $('#friend-list').append('<a href="#" class="list-group-item">'+item.name+'</a>');
+                })
+            }
         });
     });
 
     $('#main-view-btn').click(function(event) {
-        $('#friend-view').fadeOut(600, function() {
-            $('#main-view').fadeIn(700);
+        $('#friend-view').fadeOut(300, function() {
+            $('#main-view').fadeIn(300);
         });
+    });
+
+    $('#friend-view .list-group > a').click(function(event) {
+        $(this).toggleClass('active');
+        $('#friend-view .well').fadeToggle('fast');
+    });
+
+    $('#createCircleBtn').click(function(event) {
+        var circleName = $('#circle-name').val();
+        if(circleName){
+            $.post(contextPath + '/api/addNewCircle', {circle_name: circleName, user_id: id}, function(data) {
+                if(data==='true') {
+                    $('#circle-name').val('');
+                    swal('Circle Created!', '', 'success');
+                    var $newCircleItem = $('<li class="list-group-item">').appendTo('#circle-list').append('<span class="badge">0</span>'+circleName);
+                    $newCircleItem.fadeIn('slow');
+                }
+                else swal('Error!', 'Server Error', 'error');
+            });
+        }else swal('Error!', 'You must enter the name!', 'error');
     });
 
     $('#uploadBtn').change(function () {
         if (!$('.modal-footer').has('#fileLabel').length) {
             $('.modal-footer').append('<div><input id="fileLabel" disabled="disabled" class="form-control pull-left"/></div>');
-            console.log('here');
         }
         var filePath = $(this).val();
         var fileName = filePath.slice(filePath.lastIndexOf('\\') + 1);

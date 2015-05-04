@@ -17,6 +17,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
         <!--[if lt IE 9]>
                 <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -135,9 +136,10 @@
 
         <!-- script references -->
         <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="js/home.js"></script>
         <script src="js/sweetalert.min.js"></script>
-        <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
+        
     </body>
 </html>

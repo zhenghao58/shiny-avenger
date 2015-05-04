@@ -43,9 +43,20 @@ public class CircleDAO {
         String addQuery="insert into Circle(circle_name,user_id) values('"
                 +circle_name+"',"
                 +user_id+");";
+        System.out.println(addQuery);
+        String searchQuery="select circle_id from Circle where circle_name='"
+                +circle_name+"' and user_id="
+                +user_id+";";
+        System.out.println(searchQuery);
         boolean result = true;
         MyConnectionManager.getConnection();
         result = MyConnectionManager.update(addQuery);
+        
+        MyConnectionManager.excute(searchQuery);
+        ResultSet rs=MyConnectionManager.getRs();
+        rs.next();
+        int circle_id=rs.getInt("circle_id");
+        add(circle_id,user_id);
         MyConnectionManager.closeConnection();
         return result;
     }
@@ -60,7 +71,7 @@ public class CircleDAO {
         MyConnectionManager.closeConnection();
         return result;
     }
-    
+    //return the circles created by user_id
     public static List<CircleBean> search(int user_id){
             String searchQuery
                     = "select * from Circle where user_id="
@@ -76,6 +87,31 @@ public class CircleDAO {
                 cb.setName(rs.getString("circle_name"));
                 cb.setUser_id(user_id);
                 a.add(cb);
+            }
+            
+            MyConnectionManager.closeConnection();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CircleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return a;
+    }
+    //return the users of circle_id
+    public static List<UserBean> searchUsersByCircleId(int circle_id){
+            String searchQuery
+                    = "select * from Users where user_id in (select user_id from Circle_friend where circle_id="
+                    + circle_id + ");";
+            List<UserBean> a = new ArrayList<>();
+            try {
+            MyConnectionManager.getConnection();
+            boolean result = MyConnectionManager.excute(searchQuery);
+            ResultSet rs = MyConnectionManager.getRs();
+            while (rs.next()) {
+                UserBean ub = new UserBean();
+                ub.setName(rs.getString("name"));
+                ub.setUserName(rs.getString("username"));
+                ub.setUser_id(rs.getInt("user_id"));
+                a.add(ub);
             }
             
             MyConnectionManager.closeConnection();
