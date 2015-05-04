@@ -17,9 +17,10 @@ public class LocationBean {
     private float latitude;
     private String city_name;
     private String attraction;
-    private Timestamp create_At;
+    private Timestamp time;
     private int user_id;
-
+    private int circle_id;
+    private String privacy;
     /**
      * @return the location_id
      */
@@ -90,19 +91,7 @@ public class LocationBean {
         this.attraction = attraction;
     }
 
-    /**
-     * @return the create_At
-     */
-    public Timestamp getCreate_At() {
-        return create_At;
-    }
 
-    /**
-     * @param create_At the create_At to set
-     */
-    public void setCreate_At(Timestamp create_At) {
-        this.create_At = create_At;
-    }
 
     /**
      * @return the user_id
@@ -116,5 +105,47 @@ public class LocationBean {
      */
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    /**
+     * @return the circle_id
+     */
+    public int getCircle_id() {
+        return circle_id;
+    }
+
+    /**
+     * @param circle_id the circle_id to set
+     */
+    public void setCircle_id(int circle_id) {
+        this.circle_id = circle_id;
+    }
+
+    /**
+     * @return the privacy
+     */
+    public String getPrivacy() {
+        return privacy;
+    }
+
+    /**
+     * @param privacy the privacy to set
+     */
+    public void setPrivacy(String privacy) {
+        this.privacy = privacy;
+    }
+
+    /**
+     * @return the time
+     */
+    public Timestamp getTime() {
+        return time;
+    }
+
+    /**
+     * @param time the time to set
+     */
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 }

@@ -31,13 +31,11 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
 
     function getAllMessageAjax() {
         return $.getJSON(contextPath + '/api/getAllMessages', {user_id: $('#user-id').attr('value')}, function (responseJson) {
-            if(responseJson.length!==$('#messages .panel.panel-default').length){
-                $.each(responseJson, function (index, message) {
-                    var $panelWrapper = $('<div class="panel panel-default">').appendTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">' + message.time + '</a><h4>' + message.user_name + '</h4>'));
-                    $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + message.text + '</p><div class="clearFix"></div><hr>');
-                });
-                $('#messages').fadeIn('slow');  
-            }
+            $.each(responseJson, function (index, message) {
+                var $panelWrapper = $('<div class="panel panel-default">').appendTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">' + message.time + '</a><h4>' + message.user_name + '</h4>'));
+                $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + message.text + '</p><div class="clearFix"></div><hr>');
+            });
+            $('#messages').fadeIn('slow');  
         });
     }
 
@@ -135,13 +133,14 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     if(friend_list.length !== $('#friend-list ul.list-group .list-group-item').length){
                         $('#friend-list ul.list-group .list-group-item').remove();
                         friend_list.forEach(function (item) {
-                            $('#friend-list .list-group').append('<li href="#" class="list-group-item" value="' + item.user_id + '">' + item.name+dropDownHtml+'</li>');
+                            $('#friend-list .list-group').append('<li href="#" class="list-group-item" rel="'+item.name+'" value="' + item.user_id + '">' + item.name+dropDownHtml+'</li>');
                         })
                     }
             }
 
             $('.friend-dropdown ul.dropdown-menu a').click(function(event) {
                 var friend_user_id = $(this).parents('li.list-group-item').attr('value');
+                var friend_name = $(this).parents('li.list-group-item').attr('rel')
                 $("#editCircleBtn").click(function () {
                     var circle = $('#selectCircleEdit').val();
                     $.ajax({
@@ -152,10 +151,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                             circle_id: circle
                         },
                         success: function (msg) {
-                            var $panelWrapper = $('<div class="panel panel-default" style="display:none">').prependTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + name + '</h4>'));
-                            $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
-                            $panelWrapper.fadeIn(1000);
-                            $('#circle-list li.list-group-item[value='+circle+']').after($('<li class="list-group-item circle-member">').text(msg));
+                            $('#circle-list li.list-group-item[value='+circle+']').after($('<li class="list-group-item circle-member">').text(friend_name));
                         },
                         error: function () {
                             console.log('Post failure!');
