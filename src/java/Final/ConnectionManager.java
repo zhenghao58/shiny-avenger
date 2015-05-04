@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Final;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,16 +12,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author Administrator
  */
 public class ConnectionManager {
-    private  Connection con;
-    private  String url;
-    private  ResultSet rs = null;
-    private  Statement stmt = null;
-    public  void getConnection() {
+
+    private Connection con;
+    private String url;
+    private ResultSet rs = null;
+    private Statement stmt = null;
+
+    public void getConnection() {
 
         try {
             String url = "jdbc:mysql://tourini.czlgpmgnvb64.us-east-1.rds.amazonaws.com:3306/Tourini?zeroDateTimeBehavior=convertToNull";
@@ -39,91 +43,98 @@ public class ConnectionManager {
             System.out.println(e);
         }
         try {
+
             stmt = con.createStatement();
+            
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public  void closeConnection() {
-         if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception e) {
-                }
-                rs = null;
+    public void closeConnection() {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            rs = null;
+        }
+
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            stmt = null;
+        }
+
+        if (con != null) {
+            try {
+                con.close();
+            } catch (Exception e) {
             }
 
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception e) {
-                }
-                stmt = null;
-            }
+            con = null;
+        }
+    }
 
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Exception e) {
-                }
-
-                con = null;
+    public boolean excute(String sql) throws SQLException {
+        rs = stmt.executeQuery(sql);
+        if (rs != null) {
+            boolean result = rs.next();
+            if (result) {
+                rs.previous();
             }
+            return result;
+        }else return false;
+
     }
-    
-    public  boolean excute(String sql) throws SQLException {
-        rs=stmt.executeQuery(sql);
-        boolean result = rs.next();
-        if(result)rs.previous();
-        return result;
+
+    public boolean update(String sql) throws SQLException {
+        int i = 0;
+        i = stmt.executeUpdate(sql);
+        return i == 1;
     }
-    
-    public  boolean update(String sql) throws SQLException {
-        int i=0;
-        i=stmt.executeUpdate(sql);
-        return i==1;
-    }
-    
+
     /**
      * @return the con
      */
-    public  Connection getCon() {
+    public Connection getCon() {
         return con;
     }
 
     /**
      * @param aCon the con to set
      */
-    public  void setCon(Connection aCon) {
+    public void setCon(Connection aCon) {
         con = aCon;
     }
 
     /**
      * @return the url
      */
-    public  String getUrl() {
+    public String getUrl() {
         return url;
     }
 
     /**
      * @param aUrl the url to set
      */
-    public  void setUrl(String aUrl) {
+    public void setUrl(String aUrl) {
         url = aUrl;
     }
 
     /**
      * @return the rs
      */
-    public  ResultSet getRs() {
+    public ResultSet getRs() {
         return rs;
     }
 
     /**
      * @param aRs the rs to set
      */
-    public  void setRs(ResultSet aRs) {
+    public void setRs(ResultSet aRs) {
         rs = aRs;
     }
 }

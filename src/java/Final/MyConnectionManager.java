@@ -38,6 +38,7 @@ public class MyConnectionManager {
         } catch (ClassNotFoundException e) {
             System.out.println(e);
         }
+        
         try {
             stmt = con.createStatement();
         } catch (SQLException ex) {
@@ -75,7 +76,7 @@ public class MyConnectionManager {
     public static boolean excute(String sql) throws SQLException {
         rs=stmt.executeQuery(sql);
         boolean result = rs.next();
-        rs.previous();
+        if(result) rs.previous();
         return result;
     }
     

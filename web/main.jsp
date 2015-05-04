@@ -16,18 +16,6 @@
             </div>
         </div>
 
-
-<!--         <div class="panel panel-default">
-            <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Bootstrap Examples</h4></div>
-            <div class="panel-body">
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Modal / Dialog</a>
-                    <a href="#" class="list-group-item">Datetime Examples</a>
-                    <a href="#" class="list-group-item">Data Grids</a>
-                </div>
-            </div>
-        </div> -->
-
         <div class="panel panel-default">
             <div class="panel-heading"><a href="#" class="pull-right">Boot</a> <h4>Hola</h4></div>
             <div class="panel-body">

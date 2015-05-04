@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class UserDAO {
 
-    static ResultSet rs = null;
+    //static ResultSet rs = null;
 
     public static UserBean login(UserBean bean) {
         String username = bean.getUsername();
@@ -32,7 +32,7 @@ public class UserDAO {
 
             MyConnectionManager.getConnection();
             boolean more = MyConnectionManager.excute(searchQuery);
-            rs = MyConnectionManager.getRs();
+            ResultSet rs = MyConnectionManager.getRs();
 
             rs.next();
             // if user does not exist set the isValid variable to false
@@ -102,8 +102,12 @@ public class UserDAO {
         MyConnectionManager.getConnection();
         MyConnectionManager.excute(searchQuery);
         ResultSet rs = MyConnectionManager.getRs();
-        rs.next();
-        String name = rs.getString("name");
+        String name;
+        if(rs!=null){
+            rs.next();
+            name = rs.getString("name");
+        }else name = "Beckham";
+        
         MyConnectionManager.closeConnection();
         return name;
     }
@@ -114,15 +118,22 @@ public class UserDAO {
                 = "select * from Users where user_id !='"
                 + user_id + "'and user_id not in(select friend_user_id from Friend where accept=1 and user_id='"
                 + user_id + "');";
+
         MyConnectionManager.getConnection();
         MyConnectionManager.excute(searchQuery);
         ResultSet rs = MyConnectionManager.getRs();
-        while (rs.next()) {
-            UserBean ub = new UserBean();
-            ub.setName(rs.getString("name"));
-            ub.setUserName(rs.getString("username"));
-            ub.setUser_id(rs.getInt("user_id"));
-            a.add(ub);
+//        ConnectionManager cm = new ConnectionManager();
+//        cm.getConnection();
+//        cm.excute(searchQuery);
+//        ResultSet rs = cm.getRs();
+        if (rs != null) {
+            while (rs.next()) {
+                UserBean ub = new UserBean();
+                ub.setName(rs.getString("name"));
+                ub.setUserName(rs.getString("username"));
+                ub.setUser_id(rs.getInt("user_id"));
+                a.add(ub);
+            }
         }
 
         MyConnectionManager.closeConnection();

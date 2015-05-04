@@ -53,9 +53,9 @@ public class MessageDAO {
                 + user_id + ";";
         ConnectionManager cm=new ConnectionManager();
         cm.getConnection();
-        cm.excute(searchQuery);
+        boolean result = cm.excute(searchQuery);
         ResultSet rs = cm.getRs();
-        while (rs.next()) {
+        while (rs.next()&&result) {
             MessageBean ub = new MessageBean();
             ub.setPrivacy(rs.getString("privacy"));
             ub.setText(rs.getString("text"));
@@ -78,14 +78,15 @@ public class MessageDAO {
             result = true;
         } else if (privacy.equals("private")) {
             result = false;
-        } else {
+        } else if(privacy.equalsIgnoreCase("circle")){
             String searchQuery
                     = "select * from Circle_friend where circle_id="
                     + mb.getCircle_id() + " and user_id="
                     + user_id + ";";
-//            MyConnectionManager.getConnection();
+            if(MyConnectionManager.getCon()==null) MyConnectionManager.getConnection();
             MyConnectionManager.excute(searchQuery);
-            result = MyConnectionManager.getRs().next();
+            ResultSet rs = MyConnectionManager.getRs();
+            if(rs!=null) result = rs.next();
 //            MyConnectionManager.closeConnection();
         }
         return result;
@@ -127,6 +128,7 @@ public class MessageDAO {
         for (MessageBean mb : a) {
             set.add(mb.getMessage_id());
         }
+        
         while (rs.next()) {
             int messageId = rs.getInt("message_id");
             if (!set.contains(messageId)) {

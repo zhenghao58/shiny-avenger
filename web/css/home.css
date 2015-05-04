@@ -417,17 +417,26 @@ input#srch-term{
    box-shadow:0 0 0;
 }
 
-#newCircleModal .modal-footer{
+#newCircleModal .modal-footer, #editCircleModal .modal-footer {
   border-top: 0px;
   padding-bottom: 10px;
   padding-top: 5px;
 }
-#newCircleModal .modal-body{
+#newCircleModal .modal-body, #editCircleModal .modal-body{
   padding-bottom: 10px;
+}
+
+.friend-dropdown .btn-default{
+  text-shadow:none;
 }
 
 small.text-muted {
   font-family:courier,courier-new,monospace;
+}
+
+#friend-list li.list-group-item{
+  min-height: 60px;
+  font-size: 18px;
 }
 
 /* adjust the contents on smaller devices */
