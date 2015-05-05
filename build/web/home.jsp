@@ -101,7 +101,7 @@
                                     <li>
                                         <div class="fileUpload btn btn-primary btn-sm">
                                             <span>Upload Photo</span>
-                                            <input type="file" class="upload" id="uploadBtn" />
+                                            <input type="file" class="upload" id="uploadBtn" name="file"/>
                                         </div>
                                     </li>
                                     <!--                                     <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>
@@ -109,7 +109,7 @@
                                                                         <li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li> -->
 
                                     <li>
-                                        <select id="selectPrivacy" class="form-control">
+                                        <select id="selectPrivacy" class="form-control" name="privacy">
                                             <option>Public</option>
                                             <option>Friend</option>
                                             <option>Private</option>
@@ -124,6 +124,14 @@
                                         </select>
                                     </li>
                                 </ul>
+
+                            </div>
+                            <div>
+                                <select id="selectLocation" class="form-control" name="location">
+                                    <c:forEach items="${staticLocationList}" var="row">
+                                        <option value="${row.getLocation_id()}">${row.getAttraction()}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
                     </form>

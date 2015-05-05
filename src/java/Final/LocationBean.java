@@ -19,6 +19,7 @@ public class LocationBean {
     private String attraction;
     private Timestamp time;
     private int user_id;
+    private String name;
     private int circle_id;
     private String privacy;
     /**
@@ -147,5 +148,19 @@ public class LocationBean {
      */
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 }

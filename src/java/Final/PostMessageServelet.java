@@ -6,22 +6,25 @@
 package Final;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.Part;
 
 /**
  *
  * @author 睿
  */
 @WebServlet(name = "PostMessageServelet", urlPatterns = {"/api/postMessage"})
+@MultipartConfig
 public class PostMessageServelet extends HttpServlet {
 
     /**
@@ -35,22 +38,45 @@ public class PostMessageServelet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MessageBean bean=new MessageBean();
-        bean.setText(request.getParameter("text"));
+
+        Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">        
+        String fileName = filePart.getSubmittedFileName();
+        InputStream fileContent;
+        String privacy = request.getParameter("privacy").toLowerCase();
+        int circle_id = Integer.parseInt(request.getParameter("circle_id"));
+        String text = request.getParameter("text");
         int requestId = Integer.parseInt(request.getParameter("user_id"));
-        bean.setUser_id(requestId);
-        bean.setPrivacy(request.getParameter("privacy"));
-        bean.setCircle_id(Integer.parseInt(request.getParameter("circle_id")));
-        String message="false";
-        try {
-            boolean success = MessageDAO.post(bean);
-            if(success) message = "true";
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                out.print(message);
-            }       
-        } catch (SQLException ex) {
-            Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
+        int location_id = Integer.parseInt(request.getParameter("location"));
+        String message = "false";
+        boolean success = false;
+        if (fileName.length() == 0) {
+            System.out.println("no file");
+            MessageBean bean = new MessageBean();
+            bean.setText(text);
+            bean.setUser_id(requestId);
+            bean.setPrivacy(privacy);
+            bean.setCircle_id(circle_id);
+            bean.setLocation_id(location_id);
+
+            try {
+                success = MessageDAO.post(bean);
+            } catch (SQLException ex) {
+                Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            fileContent = filePart.getInputStream();
+            try {
+                success = PhotoDAO.post(text, requestId, location_id, privacy, circle_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (success) message = "true";
+
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.print(message);
         }
 
     }

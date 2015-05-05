@@ -44,6 +44,80 @@ public class LocationDAO {
         return result;
     }
     
+    public static boolean isInDistance(float originLatitude,float originLongtitude,float desLatitude,float desLongtitude,float distance){
+        double r=6371000;
+        double a=Math.toRadians(originLatitude);
+        double b=Math.toRadians(desLatitude);
+        double c=Math.toRadians(desLatitude-originLatitude);
+        double d=Math.toRadians(desLongtitude-originLongtitude);
+        double e=Math.sin(c/2) * Math.sin(c/2) +
+        Math.cos(a) * Math.cos(b) *
+        Math.sin(d/2) * Math.sin(d/2);
+        return r*e<distance;
+    }
+    
+    
+    public static List<LocationBean> search(int user_id,float distance) throws SQLException{
+        List<LocationBean>l=new ArrayList<>();
+        LocationBean lb=new LocationBean();
+        ConnectionManager cm=new ConnectionManager();
+        cm.getConnection();
+        String searchQuery1= 
+                "select * from Current_Location natural join Locations where user_id ="
+                +user_id+" order by create_at  desc limit 1;";
+        cm.excute(searchQuery1);
+        ResultSet rs=cm.getRs();
+        rs.next();
+        if(rs==null)return l;
+        float latitude=rs.getFloat("latitude");
+        float longtitude=rs.getFloat("longtitude");
+        
+        String searchQuery2= 
+                "select * from Locations where location_id !="
+                +lb.getLocation_id()+";";
+        cm.excute(searchQuery2);
+        rs=cm.getRs();
+        if(rs!=null)
+            while(rs.next()){
+                float DesLongtitude=rs.getFloat("longtitude");
+                float DesLatitude=rs.getFloat("latitude");
+                if(isInDistance(latitude,longtitude,DesLatitude,DesLongtitude,distance)){
+                    //search all users who are in the lb
+                    int location_id=rs.getInt("location_id");
+                    String searhQuery3=
+                            "select * from Current_Location natural join Locations where location_id="
+                            +location_id+"; ";
+                    ConnectionManager cm1=new ConnectionManager();
+                    cm1.getConnection();
+                    cm1.excute(searhQuery3);
+                    ResultSet rs1=cm1.getRs();
+                    while(rs1.next()){
+                        LocationBean lb1 = new LocationBean();
+                        lb1.setLocation_id(rs1.getInt("location_id"));
+                        lb1.setTime(rs1.getTimestamp("create_at"));
+                        lb1.setCity_name(rs1.getString("city_name"));
+                        lb1.setAttraction(rs1.getString("attraction"));
+                        lb1.setLatitude(rs1.getFloat("latitude"));
+                        lb1.setLongtitude(rs1.getFloat("longtitude"));
+                        lb1.setUser_id(rs1.getInt("user_id"));
+                        lb1.setCircle_id(rs1.getInt("circle_id"));
+                        lb1.setPrivacy(rs1.getString("privacy"));
+                        lb1.setName(UserDAO.NameById(rs1.getInt("user_id")));
+                        l.add(lb1);
+                    }
+                    cm1.closeConnection();
+                }
+            }
+        
+        cm.closeConnection();
+        return l;
+    }
+    
+    
+    
+    
+    
+    
     public static List<LocationBean> search(int user_id) throws SQLException {
         List<LocationBean> a = new ArrayList<>();
         String searchQuery = "select * from Current_Location cl natural join Locations l where user_id="
@@ -84,6 +158,7 @@ public class LocationDAO {
                     + user_id + ";";
 //            MyConnectionManager.getConnection();
             System.out.println(searchQuery);
+            if(MyConnectionManager.getCon()==null) MyConnectionManager.getConnection();
             result=MyConnectionManager.excute(searchQuery);
 //            MyConnectionManager.closeConnection();
         }
@@ -151,7 +226,26 @@ public class LocationDAO {
         return a;
     }
     
-    
+    public static List<LocationBean> getAll() throws SQLException{
+        List<LocationBean>l=new ArrayList<>();
+        ConnectionManager cm=new ConnectionManager();
+        cm.getConnection();
+        String searchQuery=
+                "select * from Locations;";
+        cm.excute(searchQuery);
+        ResultSet rs= cm.getRs();
+        while(rs.next()){
+            LocationBean lb = new LocationBean();
+                lb.setLocation_id(rs.getInt("location_id"));
+                lb.setCity_name(rs.getString("city_name"));
+                lb.setAttraction(rs.getString("attraction"));
+                lb.setLatitude(rs.getFloat("latitude"));
+                lb.setLongtitude(rs.getFloat("longtitude"));
+                l.add(lb);
+        }
+        cm.closeConnection();
+        return l;
+    }
     
     
     

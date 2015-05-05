@@ -20,24 +20,38 @@ import java.util.List;
 public class MessageDAO {
 
     //static ResultSet rs = null;
-    public static boolean post(MessageBean bean) throws SQLException {
+public static boolean post(MessageBean bean) throws SQLException {
         String text = bean.getText();
 //        int location_id=bean.getLocation_id();
         int circle_id = bean.getCircle_id();
         int user_id = bean.getUser_id();
+        int location_id=bean.getLocation_id();
         String privacy = bean.getPrivacy();
         boolean result = false;
         String insertQuery;
-        if (circle_id == 0) {
+        if (circle_id == 0 && location_id == 0) {
             insertQuery = "insert into Messages(text, user_id, privacy) values('"
                     + text + "',"
                     + user_id + ",'"
                     + privacy + "');";
-        } else {
+        } else if (circle_id != 0 && location_id == 0){
             insertQuery = "insert into Messages(text, user_id, circle_id, privacy) values('"
                     + text + "',"
                     + user_id + ","
                     + circle_id + ",'"
+                    + privacy + "');";
+        }else if (circle_id == 0 && location_id != 0){
+            insertQuery = "insert into Messages(text, user_id, location_id, privacy) values('"
+                    + text + "',"
+                    + user_id + ","
+                    + location_id + ",'"
+                    + privacy + "');";
+        }else {
+            insertQuery = "insert into Messages(text, user_id, circle_id, location_id, privacy) values('"
+                    + text + "',"
+                    + user_id + ","
+                    + circle_id+ ","
+                    + location_id + ",'"
                     + privacy + "');";
         }
         //connect to DB 
@@ -85,6 +99,7 @@ public class MessageDAO {
                     + user_id + ";";
             if(MyConnectionManager.getCon()==null) MyConnectionManager.getConnection();
             MyConnectionManager.excute(searchQuery);
+
             ResultSet rs = MyConnectionManager.getRs();
             if(rs!=null) result = rs.next();
 //            MyConnectionManager.closeConnection();

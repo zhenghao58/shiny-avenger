@@ -37,8 +37,8 @@ public class LoginServlet extends HttpServlet {
     private static HttpServletRequest setRequest(HttpServletRequest request, int user_id) {
         List<CircleBean> circles = CircleDAO.search(user_id);
         request.setAttribute("requestList", getRequestUsers(user_id));
+        request.setAttribute("staticLocationList", getAllStaticLocation());
         request.setAttribute("circleList", circles);
-//        request.setAttribute("friendList", getAllFriends(user_id));
         return request;
     }
 
@@ -117,6 +117,15 @@ public class LoginServlet extends HttpServlet {
         return requestList;
     }
     
+    private static List<LocationBean> getAllStaticLocation(){
+        List<LocationBean> list = new ArrayList<>();
+        try {
+            return LocationDAO.getAll();
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
     /**
      * Returns a short description of the servlet.
      *

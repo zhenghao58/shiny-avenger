@@ -14,9 +14,8 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         </button>\
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">\
         <li role="presentation"><a role="circle" tabindex="-1" href="#" data-toggle="modal" data-target="#editCircleModal">Edit circle</a></li>\
-        <li role="presentation"><a role="delete-circle" tabindex="-1" href="#">Delete from circle</a></li>\
+        <li role="presentation"><a role="delete-circle" tabindex="-1" href="#">Quit current circle</a></li>\
         <li role="presentation"><a role="unfriend" tabindex="-1" href="#">Unfriend</a></li>\
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>\
         </ul>\
         </div>';
 
@@ -71,54 +70,64 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     $('#circle-list li.list-group-item').click(function(event) {
         $circleTitle=$(this);
         var circle_id = $(this).attr('value');
-        console.log(circle_id);
-            $.ajax({
-                url: contextPath + '/api/getUsersByCircle',
-                type: 'GET',
-                dataType: 'json',
-                data: {circle_id: circle_id, user_id: id},
-            })
-            .done(function(users) {
-                $.each(users, function (userIndex, user) {
-                    $circleTitle.after($('<li class="list-group-item circle-member">').text(user.name));
-                });
-                $circleTitle.prepend('<span class="badge pull-right">' + users.length + '</span>');
-
-                
-            })
-            .fail(function() {
-                console.log("circle error on "+ circle);
-            })
+        $.ajax({
+            url: contextPath + '/api/getUsersByCircle',
+            type: 'GET',
+            dataType: 'json',
+            data: {circle_id: circle_id, user_id: id},
+        })
+        .done(function(users) {
+            $.each(users, function (userIndex, user) {
+                $circleTitle.after($('<li class="list-group-item circle-member" value="'+user.user_id+'">').text(user.name));
+                $('#friend-list li.list-group-item[value="'+user.user_id+'"]').attr('data-circle', circle_id);
+            });
+            $circleTitle.prepend('<span class="badge pull-right">' + users.length + '</span>');
+            
+        })
+        .fail(function() {
+            console.log("circle error on "+ circle);
+        })
     });
     
 
 //---------Post Message----------------------
 
     $("button#status-submit").click(function () {
+        var data = new FormData($('form#status')[0]);
         var privacy = $('#selectPrivacy').val().toLowerCase();
         var content = $('form#status textarea').val();
+        var circle_id = privacy === 'circle' ? $('#selectCircle').val() : 0;
+        data.append('user_id', id);
+        data.append('circle_id', circle_id);
         if (content) {
             $.ajax({
                 type: "POST",
                 url: contextPath + '/api/postMessage',
-                data: {
-                    text: content,
-                    user_id: id,
-                    privacy: privacy,
-                    circle_id: privacy === 'circle' ? $('#selectCircle').val() : 0
-                },
+                // data: {
+                //     text: content,
+                //     user_id: id,
+                //     privacy: privacy,
+                //     circle_id: privacy === 'circle' ? $('#selectCircle').val() : 0 ,
+                //     file:file
+                // },
+                data: data,
+                processData: false, // Don't process the files
+                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
                 success: function (msg) {
+                    if(msg==='true'){
+                        var $panelWrapper = $('<div class="panel panel-default" style="display:none">').prependTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + name + '</h4>'));
+                        $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
+                        $panelWrapper.fadeIn(1000);  
+                    }
+                    console.log(msg);
                     $('form#status textarea').val('');
-                    var $panelWrapper = $('<div class="panel panel-default" style="display:none">').prependTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + name + '</h4>'));
-                    $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
-                    $panelWrapper.fadeIn(1000);
+
                 },
                 error: function () {
                     console.log('Post failure!');
                 }
             });
-        } else
-            swal('Error!', 'Message content cannot be empty!', 'error');
+        } else swal('Error!', 'Message content cannot be empty!', 'error');
     });
 
 //---------get all friend list and edit friends---------------
@@ -138,29 +147,56 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     }
             }
 
-            $('.friend-dropdown ul.dropdown-menu a').click(function(event) {
-                var friend_user_id = $(this).parents('li.list-group-item').attr('value');
-                var friend_name = $(this).parents('li.list-group-item').attr('rel')
-                $("#editCircleBtn").click(function () {
-                    var circle = $('#selectCircleEdit').val();
-                    $.ajax({
-                        type: "POST",
-                        url: contextPath + '/api/joinCircle',
-                        data: {
-                            friend_user_id: friend_user_id,
-                            circle_id: circle
-                        },
-                        success: function (msg) {
-                            $('#circle-list li.list-group-item[value='+circle+']').after($('<li class="list-group-item circle-member">').text(friend_name));
-                        },
-                        error: function () {
-                            console.log('Post failure!');
-                        }
-                    });
-                    
-                });
+            $('.friend-dropdown ul.dropdown-menu a[role="circle"]').click(function(event) {
+                var $friend_item = $(this).parents('li.list-group-item');
+                var friend_user_id = $friend_item.attr('value');
+                var friend_name = $friend_item.attr('rel');
+                console.log($('#editCircleModal .modal-body').has('#warning-join-circle').length);
+                if($friend_item.attr('data-circle')&& $('#editCircleModal .modal-body').has('#warning-join-circle').length===0) {
+                        $('#editCircleModal .modal-body').prepend('<strong id="warning-join-circle">This user already joined a circle!</strong>');
+                        $('#selectCircleEdit').attr('disabled', 'disabled');
+                        $("#editCircleBtn").attr('disabled', 'disabled');
+                }else{
+                    $('strong#warning-join-circle').remove();
+                    $('#selectCircleEdit').removeAttr('disabled');
+                    $("#editCircleBtn").removeAttr('disabled'); 
+                    $("#editCircleBtn").click(function () {
+                        var circle = $('#selectCircleEdit').val();
 
+                        $.ajax({
+                            type: "POST",
+                            url: contextPath + '/api/joinCircle',
+                            data: {
+                                friend_user_id: friend_user_id,
+                                circle_id: circle
+                            },
+                            success: function (msg) {
+                                if(msg==='true') {
+                                    $friend_item.attr('data-circle', circle);
+                                    $('#circle-list li.list-group-item[value='+circle+']').after($('<li class="list-group-item circle-member" value="'+friend_user_id+'">').text(friend_name));
+                                }
+                                else console.log('Not added!')
+                            },
+                            error: function () {
+                                console.log('Post failure!');
+                            }
+                        });
+                    });
+                }
             });
+
+            $('.friend-dropdown ul.dropdown-menu a[role="delete-circle"]').click(function(event) {
+                var $friend_item = $(this).parents('li.list-group-item');
+                var friend_user_id = $friend_item.attr('value');
+                var circle_id = $friend_item.attr('data-circle');
+                $.post(contextPath + '/api/quitCircle', {circle_id: circle_id, friend_user_id: friend_user_id}, function(data) {
+                    if(data==='true'){
+                        swal('Quit Done!', '', 'success');
+                        $('li.circle-member[value="'+friend_user_id+'"]').remove();
+                    }
+                });
+            });
+            
         });
         
     });
@@ -179,7 +215,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     });
 
 
-//----------create a new circle------------
+//----------create a new circle---------------
     $('#createCircleBtn').click(function (event) {
         var circleName = $('#circle-name').val();
         if (circleName) {
@@ -198,12 +234,14 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     });
 
     $('#uploadBtn').change(function () {
-        if (!$('.modal-footer').has('#fileLabel').length) {
-            $('.modal-footer').append('<div><input id="fileLabel" disabled="disabled" class="form-control pull-left"/></div>');
-        }
         var filePath = $(this).val();
         var fileName = filePath.slice(filePath.lastIndexOf('\\') + 1);
-        $('#fileLabel').val(fileName);
+        
+        if (!$('.modal-footer').has('#fileLabel').length) {
+            $('.modal-footer').append('<div><input id="fileLabel" disabled class="form-control pull-left"/></div>');
+        }
+
+        $('input#fileLabel').val(fileName);
     });
 
     $("#search-friend-form button").click(function (event) {

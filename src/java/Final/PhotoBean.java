@@ -12,27 +12,15 @@ import java.sql.Timestamp;
  * @author 睿
  */
 public class PhotoBean {
-    private int photos_id;
+    private int photo_id;
     private Timestamp time;
     private String caption;
     private int location_id;
     private int circle_id;
     private int user_id;
     private String privacy;
-
-    /**
-     * @return the photos_id
-     */
-    public int getPhotos_id() {
-        return photos_id;
-    }
-
-    /**
-     * @param photos_id the photos_id to set
-     */
-    public void setPhotos_id(int photos_id) {
-        this.photos_id = photos_id;
-    }
+    
+  
 
     /**
      * @return the time
@@ -116,5 +104,19 @@ public class PhotoBean {
      */
     public void setPrivacy(String privacy) {
         this.privacy = privacy;
+    }
+
+    /**
+     * @return the photo_id
+     */
+    public int getPhoto_id() {
+        return photo_id;
+    }
+
+    /**
+     * @param photo_id the photo_id to set
+     */
+    public void setPhoto_id(int photo_id) {
+        this.photo_id = photo_id;
     }
 }

@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author apple
  */
-@WebServlet(name = "JoinCircleServlet", urlPatterns = {"/api/joinCircle"})
-public class JoinCircleServlet extends HttpServlet {
+@WebServlet(name = "QuitCircleServlet", urlPatterns = {"/api/quitCircle"})
+public class QuitCircleServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +40,10 @@ public class JoinCircleServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet JoinCircleServlet</title>");
+            out.println("<title>Servlet QuitCircleServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet JoinCircleServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet QuitCircleServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -79,7 +79,7 @@ public class JoinCircleServlet extends HttpServlet {
         int friend_user_id = Integer.parseInt(request.getParameter("friend_user_id"));
         boolean success = false;
         try {
-            success = CircleDAO.add(circle_id, friend_user_id);
+            success = CircleDAO.quit(circle_id, friend_user_id);
 
         } catch (SQLException ex) {
             Logger.getLogger(JoinCircleServlet.class.getName()).log(Level.SEVERE, null, ex);

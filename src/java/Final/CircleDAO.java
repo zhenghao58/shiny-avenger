@@ -29,7 +29,7 @@ public class CircleDAO {
         return result;
     }
 
-    public static boolean delete(int circle_id, int user_id) throws SQLException {
+    public static boolean quit(int circle_id, int user_id) throws SQLException {
         String addQuery = "delete from Circle_friend where circle_id="
                 + circle_id + " and user_id="
                 + user_id + ";";

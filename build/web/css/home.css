@@ -212,6 +212,9 @@ hr {
 
 #fileLabel{
   width: 50%;
+  margin-top: 10px;
+  background-color: #3B5999;
+  color: #fff;
 }
 
 .friend-request-btn button:not(.pull-right){
