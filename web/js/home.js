@@ -28,6 +28,10 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         $('#btnShow').toggle();
     });
 
+    function joinCircle (event) {
+
+    }
+
     function getAllMessageAjax() {
         return $.getJSON(contextPath + '/api/getAllMessages', {user_id: $('#user-id').attr('value')}, function (responseJson) {
             $.each(responseJson, function (index, message) {
@@ -67,7 +71,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
 
 //--------------------get friends in a circle-----------------
 
-    $('#circle-list li.list-group-item').click(function(event) {
+    $('#circle-list li.list-group-item.active').click(function(event) {
         $circleTitle=$(this);
         var circle_id = $(this).attr('value');
         $.ajax({
@@ -147,22 +151,29 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     }
             }
 
-            $('.friend-dropdown ul.dropdown-menu a[role="circle"]').click(function(event) {
+//----------------join a circle-------------------------------
+            // $('#friend-list .list-group-item:not([data-circle]) a[role="circle"]').click(function(event) {
+            //     /* Act on the event */
+            // });
+            $('#friend-list .list-group-item a[role="circle"]').click(function(event) {
+                $("#editCircleBtn").unbind('click');
                 var $friend_item = $(this).parents('li.list-group-item');
                 var friend_user_id = $friend_item.attr('value');
                 var friend_name = $friend_item.attr('rel');
-                console.log($('#editCircleModal .modal-body').has('#warning-join-circle').length);
+                console.log('1');
                 if($friend_item.attr('data-circle')&& $('#editCircleModal .modal-body').has('#warning-join-circle').length===0) {
                         $('#editCircleModal .modal-body').prepend('<strong id="warning-join-circle">This user already joined a circle!</strong>');
                         $('#selectCircleEdit').attr('disabled', 'disabled');
                         $("#editCircleBtn").attr('disabled', 'disabled');
-                }else{
+                        console.log('2');
+                }else if(!$friend_item.attr('data-circle')){
                     $('strong#warning-join-circle').remove();
                     $('#selectCircleEdit').removeAttr('disabled');
-                    $("#editCircleBtn").removeAttr('disabled'); 
-                    $("#editCircleBtn").click(function () {
+                    $("#editCircleBtn").removeAttr('disabled');
+                    console.log('friend_user_id: '+friend_user_id);
+                    $("#editCircleBtn").click(function(event){
                         var circle = $('#selectCircleEdit').val();
-
+                        console.log('4');
                         $.ajax({
                             type: "POST",
                             url: contextPath + '/api/joinCircle',
@@ -173,9 +184,12 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                             success: function (msg) {
                                 if(msg==='true') {
                                     $friend_item.attr('data-circle', circle);
-                                    $('#circle-list li.list-group-item[value='+circle+']').after($('<li class="list-group-item circle-member" value="'+friend_user_id+'">').text(friend_name));
+                                    $circleTitle = $('#circle-list li.active.list-group-item[value='+circle+']');
+                                    $circleTitle.after($('<li class="list-group-item circle-member" value="'+friend_user_id+'">').text(friend_name));
+                                    var pre = parseInt($circleTitle.children('span').text());
+                                    $circleTitle.children('span').text(pre+1);
                                 }
-                                else console.log('Not added!')
+                                else console.log('Not added, server side error!')
                             },
                             error: function () {
                                 console.log('Post failure!');
@@ -185,6 +199,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 }
             });
 
+//--------------------remove friend from circle-----------
             $('.friend-dropdown ul.dropdown-menu a[role="delete-circle"]').click(function(event) {
                 var $friend_item = $(this).parents('li.list-group-item');
                 var friend_user_id = $friend_item.attr('value');
@@ -192,7 +207,11 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 $.post(contextPath + '/api/quitCircle', {circle_id: circle_id, friend_user_id: friend_user_id}, function(data) {
                     if(data==='true'){
                         swal('Quit Done!', '', 'success');
+                        $friend_item.removeAttr('data-circle');
                         $('li.circle-member[value="'+friend_user_id+'"]').remove();
+                        $circleSize = $('#circle-list li.active.list-group-item[value='+circle_id+'] span.badge');
+                        var pre = parseInt($circleSize.text());
+                        $circleSize.text(pre-1);
                     }
                 });
             });
@@ -223,7 +242,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 if (data === 'true') {
                     $('#circle-name').val('');
                     swal('Circle Created!', '', 'success');
-                    var $newCircleItem = $('<li class="list-group-item">').appendTo('#circle-list').append('<span class="badge">0</span><strong>' + circleName+'</strong>');
+                    var $newCircleItem = $('<li class="list-group-item active">').appendTo('#circle-list').append('<span class="badge">0</span><strong>' + circleName+'</strong>');
                     $newCircleItem.fadeIn('slow');
                 }
                 else
@@ -276,13 +295,13 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         });
     });
 
-
-
-
     $('#selectPrivacy').change(function () {
         if ($(this).val() === "Circle") {
             $('#selectCircle').removeAttr('disabled');
         } else
             $('#selectCircle').attr('disabled', 'disabled');
     });
+
+
+
 });

@@ -5,9 +5,11 @@
  */
 package Final;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,11 +68,15 @@ public class PostMessageServelet extends HttpServlet {
 
         } else {
             fileContent = filePart.getInputStream();
-            try {
-                success = PhotoDAO.post(text, requestId, location_id, privacy, circle_id);
-            } catch (SQLException ex) {
-                Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            File file = File.createTempFile("somefilename-", ".jpg", new File("/Users/apple/WebStorage/images"));
+//            Files.copy(fileContent, file.toPath());
+//            String imageFileName = file.getName();
+//            System.out.println(imageFileName);
+//            try {
+//                success = PhotoDAO.post(text, requestId, location_id, privacy, circle_id);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
         if (success) message = "true";
 

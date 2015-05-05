@@ -420,12 +420,12 @@ input#srch-term{
    box-shadow:0 0 0;
 }
 
-#newCircleModal .modal-footer, #editCircleModal .modal-footer {
+#newCircleModal .modal-footer, #editCircleModal .modal-footer, #invalidEditCircle .modal-footer{
   border-top: 0px;
   padding-bottom: 10px;
   padding-top: 5px;
 }
-#newCircleModal .modal-body, #editCircleModal .modal-body{
+#newCircleModal .modal-body, #editCircleModal .modal-body, #invalidEditCircle .modal-body{
   padding-bottom: 10px;
 }
 
