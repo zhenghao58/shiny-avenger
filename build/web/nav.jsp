@@ -35,7 +35,7 @@
                     <i class="glyphicon glyphicon-user"></i> ${sessionScope.currentSessionUser.getName()}
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="">Logout</a></li> 
+                    <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li> 
                 </ul>
             </li>
             <li class="dropdown">
