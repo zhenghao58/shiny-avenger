@@ -19,50 +19,58 @@ import java.util.logging.Logger;
  * @author 睿
  */
 public class PhotoDAO {
-    public static boolean post(String caption,int user_id,int location_id, String privacy,int circle_id) throws SQLException{
+
+    public static int post(String caption, int user_id, int location_id, String privacy, int circle_id) throws SQLException {
         String insertQuery;
-        if(circle_id!=0 && location_id!=0)
-            insertQuery="insert into Photos(user_id,location_id,circle_id,privacy,caption) values("
-                    +user_id+","
-                    +location_id+","
-                    +circle_id+",'"
-                    +privacy+"','"
-                    +caption+"');";
-        else if(circle_id==0 && location_id!=0)
-            insertQuery="insert into Photos(user_id,location_id,privacy,caption) values("
-                    +user_id+","
-                    +location_id+",'"
-                    +privacy+"','"
-                    +caption+"');";
-        else if(circle_id==0 && location_id!=0)
-            insertQuery="insert into Photos(user_id,circle_id,privacy,caption) values("
-                    +user_id+","
-                    +circle_id+",'"
-                    +privacy+"','"
-                    +caption+"');";
-        else
-            insertQuery="insert into Photos(user_id,privacy,caption) values("
-                    +user_id+",'"
-                    +privacy+"','"
-                    +caption+"');";
-        boolean result=false;
-        ConnectionManager cm=new ConnectionManager();
+        if (circle_id != 0 && location_id != 0) {
+            insertQuery = "insert into Photos(user_id,location_id,circle_id,privacy,caption) values("
+                    + user_id + ","
+                    + location_id + ","
+                    + circle_id + ",'"
+                    + privacy + "','"
+                    + caption + "');";
+        } else if (circle_id == 0 && location_id != 0) {
+            insertQuery = "insert into Photos(user_id,location_id,privacy,caption) values("
+                    + user_id + ","
+                    + location_id + ",'"
+                    + privacy + "','"
+                    + caption + "');";
+        } else if (circle_id == 0 && location_id != 0) {
+            insertQuery = "insert into Photos(user_id,circle_id,privacy,caption) values("
+                    + user_id + ","
+                    + circle_id + ",'"
+                    + privacy + "','"
+                    + caption + "');";
+        } else {
+            insertQuery = "insert into Photos(user_id,privacy,caption) values("
+                    + user_id + ",'"
+                    + privacy + "','"
+                    + caption + "');";
+        }
+        int result = 0;
+        ConnectionManager cm = new ConnectionManager();
         cm.getConnection();
         try {
-            result=cm.update(insertQuery);
+            cm.update(insertQuery);
         } catch (SQLException ex) {
             Logger.getLogger(PhotoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        String searchQuery
+                = "select max(photo_id) photo_id from Photos;";
+        cm.excute(searchQuery);
+        ResultSet rs = cm.getRs();
+        rs.next();
+        result = rs.getInt("photo_id");
         cm.closeConnection();
         return result;
     }
-    
-    public static List<PhotoBean> search(int user_id) throws SQLException {
+
+    private static List<PhotoBean> search(int user_id) throws SQLException {
         List<PhotoBean> a = new ArrayList<>();
         String searchQuery = "select * from Photos where user_id="
                 + user_id + ";";
 
-        ConnectionManager cm=new ConnectionManager();
+        ConnectionManager cm = new ConnectionManager();
         cm.getConnection();
         cm.excute(searchQuery);
         ResultSet rs = cm.getRs();
@@ -73,48 +81,53 @@ public class PhotoDAO {
             pb.setTime(rs.getTimestamp("create_at"));
             pb.setUser_id(rs.getInt("user_id"));
             pb.setCircle_id(rs.getInt("circle_id"));
-            pb.setPhoto_id(rs.getInt("location_id"));
+            pb.setLocation_id(rs.getInt("location_id"));
             pb.setPrivacy(rs.getString("privacy"));
+
             a.add(pb);
         }
         cm.closeConnection();
         return a;
     }
-    
-        public static boolean visible(PhotoBean pb, int user_id) throws SQLException {
+
+    public static boolean visible(PhotoBean pb, int user_id) throws SQLException {
         String privacy = pb.getPrivacy();
         boolean result = false;
         if (privacy.equals("public") || privacy.equals("friend")) {
             result = true;
         } else if (privacy.equals("private")) {
             result = false;
-        } else if(privacy.equals("circle")){
+        } else if (privacy.equals("circle")) {
             String searchQuery
                     = "select * from Circle_friend where circle_id="
                     + pb.getCircle_id() + " and user_id="
                     + user_id + ";";
-//            MyConnectionManager.getConnection();
+            if (MyConnectionManager.getCon() == null) {
+                MyConnectionManager.getConnection();
+            }
             System.out.println(searchQuery);
-            result=MyConnectionManager.excute(searchQuery);
+            result = MyConnectionManager.excute(searchQuery);
 //            MyConnectionManager.closeConnection();
         }
         return result;
     }
-    
-    
+
     public static List<PhotoBean> searchAll(int user_id) throws SQLException {
-         //add user_id's photos
-        List<PhotoBean> a = new ArrayList<>();
-        List<PhotoBean> b= search(user_id);
-        if(b.size()!=0)a=b;
+        //add user_id's photos
+        //List<PhotoBean> a = new ArrayList<>();
+        List<PhotoBean> a = search(user_id);
+        //if (!b.isEmpty()) a = b;
+        
+
+        
         //search the friendList
         ArrayList<UserBean> uba = FriendDAO.searchAllFrind(user_id);
-        System.out.println("friend size:"+uba.size());
+        System.out.println("friend size:" + uba.size());
         MyConnectionManager.getConnection();
         for (UserBean ub : uba) {
             //for each friend, search his own photoList
             List<PhotoBean> pba = search(ub.getUser_id());
-            System.out.println(user_id+":photo size of friend "+ub.getName()+":"+pba.size());
+            System.out.println(user_id + ":photo size of friend " + ub.getName() + ":" + pba.size());
             for (PhotoBean pb : pba) {
                 //for each of this photo, check its visibility to the user_id
                 if (visible(pb, user_id)) {
@@ -124,29 +137,32 @@ public class PhotoDAO {
             }
         }
         MyConnectionManager.closeConnection();
-        
+        HashSet<Integer> set = new HashSet();
+        for (PhotoBean pb : a) {
+            set.add(pb.getPhoto_id());
+        }
         //add all users' photos with public privacy
         String addQuery = "select * from Photos where privacy='public'";
         MyConnectionManager.getConnection();
         MyConnectionManager.excute(addQuery);
         ResultSet rs = MyConnectionManager.getRs();
-        HashSet<Integer> set = new HashSet();
-        for (PhotoBean pb : a) {
-            set.add(pb.getPhoto_id());
-        }
-        while (rs.next()) {
-            int photoId = rs.getInt("photo_id");
-            if (!set.contains(photoId)) {
-                set.add(photoId);
-                PhotoBean pb = new PhotoBean();
-            pb.setPhoto_id(rs.getInt("photo_id"));
-            pb.setCaption(rs.getString("caption"));
-            pb.setTime(rs.getTimestamp("create_at"));
-            pb.setUser_id(rs.getInt("user_id"));
-            pb.setCircle_id(rs.getInt("circle_id"));
-            pb.setPhoto_id(rs.getInt("location_id"));
-            pb.setPrivacy(rs.getString("privacy"));
-                a.add(pb);
+        if(rs==null) System.out.println("rs is null in PhotoDao search all");
+        else {
+            while (rs.next()) {
+                if(rs==null) break;
+                int photoId = rs.getInt("photo_id");
+                if (!set.contains(photoId)) {
+                    set.add(photoId);
+                    PhotoBean pb = new PhotoBean();
+                    pb.setPhoto_id(rs.getInt("photo_id"));
+                    pb.setCaption(rs.getString("caption"));
+                    pb.setTime(rs.getTimestamp("create_at"));
+                    pb.setUser_id(rs.getInt("user_id"));
+                    pb.setCircle_id(rs.getInt("circle_id"));
+                    pb.setLocation_id(rs.getInt("location_id"));
+                    pb.setPrivacy(rs.getString("privacy"));
+                    a.add(pb);
+                }
             }
         }
         MyConnectionManager.closeConnection();
@@ -159,15 +175,5 @@ public class PhotoDAO {
 
         return a;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-}
 
+}

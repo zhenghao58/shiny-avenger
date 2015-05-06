@@ -118,6 +118,7 @@ public class MyConnectionManager {
      * @return the rs
      */
     public static ResultSet getRs() {
+        if(rs==null) System.out.println("rs is null!!!");
         return rs;
     }
 

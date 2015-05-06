@@ -78,6 +78,7 @@ public static boolean post(MessageBean bean) throws SQLException {
             ub.setTime(rs.getTimestamp("time"));
             ub.setUser_id(user_id);
             ub.setUser_name(UserDAO.NameById(user_id));
+            ub.setLocation_id(rs.getInt("location_id"));
             a.add(ub);
         }
         
@@ -156,6 +157,7 @@ public static boolean post(MessageBean bean) throws SQLException {
                 int message_user_id = rs.getInt("user_id");
                 ub.setUser_id(message_user_id);
                 ub.setUser_name(UserDAO.NameById(message_user_id));
+                ub.setLocation_id(rs.getInt("location_id"));
                 a.add(ub);
             }
         }

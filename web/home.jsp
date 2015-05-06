@@ -94,7 +94,7 @@
                                 <textarea class="form-control input-lg" name="text" autofocus="" placeholder="What do you want to share?"></textarea>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer" id="modalFooterPost">
                             <div>    
                                 <button id="status-submit" class="btn btn-primary btn-sm" data-dismiss="modal" aria-hidden="true">Post</button>
                                 <ul class="pull-left list-inline">
@@ -128,6 +128,7 @@
                             </div>
                             <div>
                                 <select id="selectLocation" class="form-control" name="location">
+                                    <option value="0">Select location</option>
                                     <c:forEach items="${staticLocationList}" var="row">
                                         <option value="${row.getLocation_id()}">${row.getAttraction()}</option>
                                     </c:forEach>

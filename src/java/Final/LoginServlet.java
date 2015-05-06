@@ -5,6 +5,7 @@
  */
 package Final;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class LoginServlet extends HttpServlet {
         } else {    
             int user_id = ((UserBean) request.getSession().getAttribute("currentSessionUser")).getUser_id();
             request = setRequest(request, user_id);
-            System.out.println("Loging using Get! " + user_id);
+            System.out.println("Loging using Get! " + user_id +";");
             request.getRequestDispatcher("home.jsp").include(request, response);
         }
     }

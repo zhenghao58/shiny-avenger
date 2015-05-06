@@ -29,6 +29,8 @@ import javax.servlet.http.Part;
 @MultipartConfig
 public class PostMessageServelet extends HttpServlet {
 
+    public static final String UPLOAD_DIR = "/Users/apple/WebStorage";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,11 +48,12 @@ public class PostMessageServelet extends HttpServlet {
         InputStream fileContent;
         String privacy = request.getParameter("privacy").toLowerCase();
         int circle_id = Integer.parseInt(request.getParameter("circle_id"));
-        String text = request.getParameter("text");
+        String text = request.getParameter("text").length()!=0 ? request.getParameter("text"): "I posted a picture." ;
         int requestId = Integer.parseInt(request.getParameter("user_id"));
         int location_id = Integer.parseInt(request.getParameter("location"));
         String message = "false";
-        boolean success = false;
+        boolean messageResult = false;
+        int photoResult = 0;
         if (fileName.length() == 0) {
             System.out.println("no file");
             MessageBean bean = new MessageBean();
@@ -59,26 +62,37 @@ public class PostMessageServelet extends HttpServlet {
             bean.setPrivacy(privacy);
             bean.setCircle_id(circle_id);
             bean.setLocation_id(location_id);
+            try {
+                messageResult = MessageDAO.post(bean);
+            } catch (SQLException ex) {
+                Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (messageResult) {
+                message = "true";
+            }
+        } else {
+            fileContent = filePart.getInputStream();
+            File fileDir = new File(UPLOAD_DIR + File.separator + request.getParameter("user_id"));
+            if (!fileDir.exists()) {
+                fileDir.mkdirs();
+                System.out.println("Create directory!");
+            }
 
             try {
-                success = MessageDAO.post(bean);
+                photoResult = PhotoDAO.post(text, requestId, location_id, privacy, circle_id);
+                if (photoResult != 0) {
+                    File file = new File(fileDir, Integer.toString(photoResult)+".jpg");
+                    Files.copy(fileContent, file.toPath());
+                    String imageFileName = file.getName();
+                    System.out.println(imageFileName);
+                    message = "true";
+
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } else {
-            fileContent = filePart.getInputStream();
-//            File file = File.createTempFile("somefilename-", ".jpg", new File("/Users/apple/WebStorage/images"));
-//            Files.copy(fileContent, file.toPath());
-//            String imageFileName = file.getName();
-//            System.out.println(imageFileName);
-//            try {
-//                success = PhotoDAO.post(text, requestId, location_id, privacy, circle_id);
-//            } catch (SQLException ex) {
-//                Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         }
-        if (success) message = "true";
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {

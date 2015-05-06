@@ -28,22 +28,24 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         $('#btnShow').toggle();
     });
 
-    function joinCircle (event) {
-
-    }
-
     function getAllMessageAjax() {
         return $.getJSON(contextPath + '/api/getAllMessages', {user_id: $('#user-id').attr('value')}, function (responseJson) {
             $.each(responseJson, function (index, message) {
+
                 var $panelWrapper = $('<div class="panel panel-default">').appendTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">' + message.time + '</a><h4>' + message.user_name + '</h4>'));
-                $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + message.text + '</p><div class="clearFix"></div><hr>');
+                
+                var $panelBody = $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + message.text + '</p><div class="clearFix"></div><hr>');
+                if(message.location_id) $panelBody.append('<p style="color: #737373">'+$('select#selectLocation option[value="'+message.location_id+'"]').text()+'</p>');
             });
             $('#messages').fadeIn('slow');  
         });
     }
 
-
-
+    function getAllPhotoAjax(){
+        return $.getJSON(contextPath + '/api/getAllPhotos', {user_id: $('#user-id').attr('value')}, function(responseJson) {
+                console.log(responseJson);
+        });
+    }
 
     function getAllUsersAjax() {
         return $.getJSON(contextPath + '/api/getAllUsers', {user_id: $('#user-id').attr('value')}, function (data) {
@@ -65,7 +67,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         });
     }
 
-    $.when(getAllMessageAjax(), getAllUsersAjax()).done(function(a1, a2){
+    $.when(getAllPhotoAjax(), getAllMessageAjax(), getAllUsersAjax()).done(function(a1, a2, a3){
         console.log('Initialize finished!');
     })
 
@@ -94,7 +96,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     });
     
 
-//---------Post Message----------------------
+//-------------------Post Message----------------------
 
     $("button#status-submit").click(function () {
         var data = new FormData($('form#status')[0]);
@@ -103,17 +105,10 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         var circle_id = privacy === 'circle' ? $('#selectCircle').val() : 0;
         data.append('user_id', id);
         data.append('circle_id', circle_id);
-        if (content) {
+        if (content||$('#fileLabel').val()) {
             $.ajax({
                 type: "POST",
                 url: contextPath + '/api/postMessage',
-                // data: {
-                //     text: content,
-                //     user_id: id,
-                //     privacy: privacy,
-                //     circle_id: privacy === 'circle' ? $('#selectCircle').val() : 0 ,
-                //     file:file
-                // },
                 data: data,
                 processData: false, // Don't process the files
                 contentType: false, // Set content type to false as jQuery will tell the server its a query string request
@@ -125,7 +120,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     }
                     console.log(msg);
                     $('form#status textarea').val('');
-
+                    $('#fileLabel').val('');
                 },
                 error: function () {
                     console.log('Post failure!');
@@ -134,7 +129,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         } else swal('Error!', 'Message content cannot be empty!', 'error');
     });
 
-//---------get all friend list and edit friends---------------
+//--------------get all friend list and edit friends---------------
     $('#friend-view-btn').click(function (event) {
         $('#main-view').fadeOut(300, function () {
             $('#friend-view').fadeIn(300);
@@ -151,26 +146,21 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     }
             }
 
-//----------------join a circle-------------------------------
-            // $('#friend-list .list-group-item:not([data-circle]) a[role="circle"]').click(function(event) {
-            //     /* Act on the event */
-            // });
+            //----------------join a circle-------------------------------
+
             $('#friend-list .list-group-item a[role="circle"]').click(function(event) {
                 $("#editCircleBtn").unbind('click');
                 var $friend_item = $(this).parents('li.list-group-item');
                 var friend_user_id = $friend_item.attr('value');
                 var friend_name = $friend_item.attr('rel');
-                console.log('1');
                 if($friend_item.attr('data-circle')&& $('#editCircleModal .modal-body').has('#warning-join-circle').length===0) {
                         $('#editCircleModal .modal-body').prepend('<strong id="warning-join-circle">This user already joined a circle!</strong>');
                         $('#selectCircleEdit').attr('disabled', 'disabled');
                         $("#editCircleBtn").attr('disabled', 'disabled');
-                        console.log('2');
                 }else if(!$friend_item.attr('data-circle')){
                     $('strong#warning-join-circle').remove();
                     $('#selectCircleEdit').removeAttr('disabled');
                     $("#editCircleBtn").removeAttr('disabled');
-                    console.log('friend_user_id: '+friend_user_id);
                     $("#editCircleBtn").click(function(event){
                         var circle = $('#selectCircleEdit').val();
                         console.log('4');
@@ -215,14 +205,10 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     }
                 });
             });
-            
-        });
-        
+        });  
     });
 
-
-
-
+//----------------------Sidebar Switch----------------------
     $('#main-view-btn').click(function (event) {
         $('#friend-view').fadeOut(300, function () {
             $('#main-view').fadeIn(300);
@@ -234,7 +220,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     });
 
 
-//----------create a new circle---------------
+//----------------Create a new circle---------------
     $('#createCircleBtn').click(function (event) {
         var circleName = $('#circle-name').val();
         if (circleName) {
@@ -251,17 +237,21 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         } else
             swal('Error!', 'You must enter the name!', 'error');
     });
-
+//-------------Upload Photo-----------------------
     $('#uploadBtn').change(function () {
         var filePath = $(this).val();
-        var fileName = filePath.slice(filePath.lastIndexOf('\\') + 1);
-        
-        if (!$('.modal-footer').has('#fileLabel').length) {
-            $('.modal-footer').append('<div><input id="fileLabel" disabled class="form-control pull-left"/></div>');
-        }
+        if(filePath){
+            var fileName = filePath.slice(filePath.lastIndexOf('\\') + 1);
+            
+            if (!$('.modal-footer#modalFooterPost').has('#fileLabel').length) {
+                $('.modal-footer#modalFooterPost').append('<div><input id="fileLabel" disabled class="form-control pull-left"/></div>');
+            }
 
-        $('input#fileLabel').val(fileName);
+            $('input#fileLabel').val(fileName);
+        }else $('input#fileLabel').parent().remove();
+
     });
+
 
     $("#search-friend-form button").click(function (event) {
         swal({title: "Send Request?",
