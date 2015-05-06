@@ -99,16 +99,20 @@ public class UserDAO {
                 + user_id + ";";
         //connect to DB 
 
-        MyConnectionManager.getConnection();
-        MyConnectionManager.excute(searchQuery);
-        ResultSet rs = MyConnectionManager.getRs();
+//        MyConnectionManager.getConnection();
+//        MyConnectionManager.excute(searchQuery);
+//        ResultSet rs = MyConnectionManager.getRs();
+        ConnectionManager cm = new ConnectionManager();
+        cm.getConnection();
+        cm.excute(searchQuery);
+        ResultSet rs = cm.getRs();
         String name;
         if(rs!=null){
             rs.next();
             name = rs.getString("name");
         }else name = "Beckham";
         
-        MyConnectionManager.closeConnection();
+        cm.closeConnection();
         return name;
     }
 

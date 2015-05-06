@@ -83,7 +83,6 @@ public class PhotoDAO {
             pb.setCircle_id(rs.getInt("circle_id"));
             pb.setLocation_id(rs.getInt("location_id"));
             pb.setPrivacy(rs.getString("privacy"));
-
             a.add(pb);
         }
         cm.closeConnection();
@@ -114,9 +113,9 @@ public class PhotoDAO {
 
     public static List<PhotoBean> searchAll(int user_id) throws SQLException {
         //add user_id's photos
-        //List<PhotoBean> a = new ArrayList<>();
-        List<PhotoBean> a = search(user_id);
-        //if (!b.isEmpty()) a = b;
+        List<PhotoBean> a = new ArrayList<>();
+        List<PhotoBean> b = search(user_id);
+        if (!b.isEmpty()) a = b;
         
 
         

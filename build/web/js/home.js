@@ -67,9 +67,23 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         });
     }
 
-    $.when(getAllPhotoAjax(), getAllMessageAjax(), getAllUsersAjax()).done(function(a1, a2, a3){
-        console.log('Initialize finished!');
-    })
+//----------------------------------queue Ajax solution 1 not suggested-------------------------
+    // $.when(getAllPhotoAjax(), getAllMessageAjax(), getAllUsersAjax()).done(function(a1, a2, a3){
+    //     console.log('Initialize finished!');
+    // })
+
+//----------------------------------queue Ajax solution 2-------------------------
+    // $.when(getAllPhotoAjax())
+    //     .done(function() {
+    //         getAllMessageAjax();
+    //     })
+    //     .done(function() {
+    //         getAllUsersAjax();
+    //     })
+
+//----------------------------------queue Ajax solution 3-------------------------
+    $.when(getAllPhotoAjax()).done(getAllMessageAjax()).done(getAllUsersAjax());
+
 
 //--------------------get friends in a circle-----------------
 

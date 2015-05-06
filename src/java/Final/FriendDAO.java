@@ -91,7 +91,7 @@ public class FriendDAO {
         while (rs.next()) {
             UserBean ub = new UserBean();
             ub.setName(rs.getString("name"));
-            ub.setUserName(rs.getString("username"));
+            //ub.setUserName(rs.getString("username"));
             ub.setUser_id(rs.getInt("user_id"));
             a.add(ub);
         }
