@@ -4,26 +4,47 @@
 
     <!-- main col left --> 
     <div class="col-sm-5">
+        <div class="well"> 
+           <form class="form-horizontal" role="form">
+            <h4>Where are you now?</h4>
+                <div class="form-group" style="padding:8px;margin-bottom: 0px">
+                    <div>
+                        <select id="selectWellLocation" class="form-control" name="location">
+                            <option value="0">Select location</option>
+                            <c:forEach items="${staticLocationList}" var="row">
+                                <option value="${row.getLocation_id()}" rel="${row.getCity_name()}">${row.getAttraction()}</option>
+                            </c:forEach>
+                        </select>
+                        <ul class="pull-left list-inline">
+                            <li>
+                                <select id="selectWellPrivacy" class="form-control" name="privacy">
+                                    <option>Public</option>
+                                    <option>Friend</option>
+                                    <option>Private</option>
+                                    <option>Circle</option>
+                                </select>
+                            </li>
+                            <li>
+                                <select id="selectWellCircle" disabled class="form-control">
+                                    <c:forEach items="${circleList}" var="row">
+                                        <option value="${row.getCircle_id()}">${row.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            <button class="btn btn-primary btn-sm pull-right" id="location-submit" type="button">Post</button>
+            <ul class="list-inline">
+                <li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li>
+                <li id="cityName"></li>
+            </ul>
+          </form>
+        </div>
         <div id="photos" style="display:none">
         </div>
-<!--         <div class="panel panel-default">
-            <div class="panel-thumbnail">
-                <img src="${pageContext.request.contextPath}/images/2/5.jpg" class="img-responsive">
-            </div>
-            <div class="panel-body">
-                <p class="lead">Urbanization</p>
-                <p>45 Followers, 13 Posts</p>
-                <hr>
-                <p><i class="glyphicon glyphicon-map-marker"></i> -at <strong style="color: #3B5999">Statue of liberty</strong> 
-                </p>
-                <div class="clearfix"></div>
-                <form>
-                    <input type="text" class="form-control" placeholder="Add a comment..">
-                </form>
-            </div>
-        </div> -->
 
-        <div class="panel panel-default">
+<!--         <div class="panel panel-default">
             <div class="panel-heading"><a href="#" class="pull-right">Boot</a> <h4>Hola</h4></div>
             <div class="panel-body">
                 <img src="//placehold.it/150x150" class="img-circle pull-right"> <a href="#">Free @Bootply</a>
@@ -39,7 +60,7 @@
             <div class="panel-body">
                 Bootstrap is front end frameworkto build custom web applications that are fast, responsive &amp; intuitive. It consist of CSS and HTML for typography, forms, buttons, tables, grids, and navigation along with custom-built jQuery plug-ins and support for responsive layouts. With dozens of reusable components for navigation, pagination, labels, alerts etc..            
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- main col right -->
@@ -55,7 +76,10 @@
                 </div>
             </form>
         </div>
+
         <div id="messages" style="display:none">
+        </div>
+        <div id="locations" style="display:none">
         </div>
     </div>
 </div><!--/row-->

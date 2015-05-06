@@ -347,6 +347,11 @@ input#srch-term{
     color:#fffffe;
 }
 
+
+.well ul.list-inline.pull-left{
+  margin-top: 10px;
+}
+
 #circle-list .list-group-item.active a{
   color:#fffffe;
 }

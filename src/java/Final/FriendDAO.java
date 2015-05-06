@@ -52,6 +52,28 @@ public class FriendDAO {
         return result;
     }
 
+    public static boolean delete(String friend_name, int user_id) throws SQLException {
+        FriendBean bean = new FriendBean();
+        int friend_user_id = idByName(friend_name);
+        bean.setAccept(false);
+        boolean result = true;
+        String deleteQuery
+                = "delete from Friend where user_id="
+                + user_id + " and friend_user_id="
+                + friend_user_id + ";";
+        
+        String deleteQuery2
+                = "delete from Friend where user_id="
+                + friend_user_id + " and friend_user_id="
+                + user_id + ";";
+        //connect to DB 
+        ConnectionManager cm =new ConnectionManager();
+        cm.getConnection();
+        result = cm.update(deleteQuery) && cm.update(deleteQuery2);
+        cm.closeConnection();
+        return result;
+    }
+    
     public static boolean respond(FriendBean bean, boolean accept) throws SQLException {
         int user_id = bean.getUser_id();
         int friend_user_id = bean.getFriend_user_id();

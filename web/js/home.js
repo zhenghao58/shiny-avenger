@@ -88,7 +88,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     //     })
 
 //----------------------------------queue Ajax solution 3-------------------------
-    $.when(getAllPhotoAjax()).done(getAllMessageAjax()).done(getAllUsersAjax());
+    $.when(getAllMessageAjax()).done(getAllPhotoAjax()).done(getAllUsersAjax());
 
 
 //--------------------get friends in a circle-----------------
@@ -114,7 +114,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
             console.log("circle error on "+ circle_id);
         })
     });
-    
+
 
 //-------------------Post Message----------------------
 
@@ -123,6 +123,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         var privacy = $('#selectPrivacy').val().toLowerCase();
         var content = $('form#status textarea').val();
         var circle_id = privacy === 'circle' ? $('#selectCircle').val() : 0;
+        var location_id = $('#selectLocation').val();
         data.append('user_id', id);
         data.append('circle_id', circle_id);
         if (content||$('#fileLabel').val()) {
@@ -135,7 +136,8 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 success: function (msg) {
                     if(msg==='true'){
                         var $panelWrapper = $('<div class="panel panel-default" style="display:none">').prependTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + name + '</h4>'));
-                        $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
+                        var $panelBody = $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + content + '</p><div class="clearFix"></div><hr>');
+                        if(parseInt(location_id)) $panelBody.append('<p><i class="glyphicon glyphicon-map-marker"></i> —at <strong style="color: #3B5999">'+$('select#selectLocation option[value="'+location_id+'"]').text()+'</strong></p>');
                         $panelWrapper.fadeIn(1000);  
                     }
                     console.log(msg);
@@ -146,7 +148,32 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     console.log('Post failure!');
                 }
             });
-        } else swal('Error!', 'Message content cannot be empty!', 'error');
+        } else swal('Wait!', 'Message content cannot be empty!', 'error');
+    });
+
+//-------------------------Post Location--------------------------
+    $('button#location-submit').click(function(event) {
+        var location_id = parseInt($('#selectWellLocation').val());
+        var privacy = $('#selectWellPrivacy').val().toLowerCase();
+        var circle_id = privacy === 'circle' ? $('#selectWellCircle').val() : 0;
+        var location_name = $('select#selectLocation option[value="'+location_id+'"]').text();
+        var city_name = $('#selectWellLocation option[value="'+location_id+'"]').attr('rel')
+        if(!location_id) swal('Wait!', 'You must choose a location', 'error');
+        else{
+            $.post(contextPath + '/api/postLocation', {
+                user_id: id, 
+                location_id: location_id, 
+                privacy: privacy,
+                circle_id: circle_id
+            }, function (msg){
+                console.log(msg);
+                if(msg==='true'){
+                    var $panelWrapper = $('<div class="panel panel-default" style="display:none">').insertAfter('#search-friend-well').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">Just now</a><h4>' + location_name + '</h4>'));
+                    $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + name + ' is at <strong style="color: #3B5999">' +location_name+', '+city_name+ '</strong></p><div class="clearFix"></div><hr>');
+                    $panelWrapper.fadeIn(1000);  
+                }
+            });
+        }
     });
 
 //--------------get all friend list and edit friends---------------
@@ -304,12 +331,23 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 swal('Error!', 'Server Error', 'error');
         });
     });
+//---------------------------Realtime Change------------------------------
+    $('#selectWellLocation').change(function(event) {
+        $('#cityName').text($('#selectWellLocation option:selected').attr('rel'));
+    });
 
     $('#selectPrivacy').change(function () {
         if ($(this).val() === "Circle") {
             $('#selectCircle').removeAttr('disabled');
         } else
             $('#selectCircle').attr('disabled', 'disabled');
+    });
+
+    $('#selectWellPrivacy').change(function () {
+        if ($(this).val() === "Circle") {
+            $('#selectWellCircle').removeAttr('disabled');
+        } else
+            $('#selectWellCircle').attr('disabled', 'disabled');
     });
 
 
