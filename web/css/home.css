@@ -346,6 +346,10 @@ input#srch-term{
 	background-color:#3B5999;
     color:#fffffe;
 }
+
+#circle-list .list-group-item.active a{
+  color:#fffffe;
+}
 .btn-default {
     color:#666666;
     text-shadow:0 0 1px rgba(0,0,0,.3);

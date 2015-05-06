@@ -4,17 +4,24 @@
 
     <!-- main col left --> 
     <div class="col-sm-5">
-
-        <div class="panel panel-default">
-            <div class="panel-thumbnail"><img src="img/DY5C0649_small.jpg" class="img-responsive"></div>
+        <div id="photos" style="display:none">
+        </div>
+<!--         <div class="panel panel-default">
+            <div class="panel-thumbnail">
+                <img src="${pageContext.request.contextPath}/images/2/5.jpg" class="img-responsive">
+            </div>
             <div class="panel-body">
                 <p class="lead">Urbanization</p>
                 <p>45 Followers, 13 Posts</p>
-                <p>
-                    <img src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s28" width="28px" height="28px">
+                <hr>
+                <p><i class="glyphicon glyphicon-map-marker"></i> -at <strong style="color: #3B5999">Statue of liberty</strong> 
                 </p>
+                <div class="clearfix"></div>
+                <form>
+                    <input type="text" class="form-control" placeholder="Add a comment..">
+                </form>
             </div>
-        </div>
+        </div> -->
 
         <div class="panel panel-default">
             <div class="panel-heading"><a href="#" class="pull-right">Boot</a> <h4>Hola</h4></div>
@@ -49,41 +56,6 @@
             </form>
         </div>
         <div id="messages" style="display:none">
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Stackoverflow</h4></div>
-            <div class="panel-body">
-                <img src="//placehold.it/150x150" class="img-circle pull-right"> <a href="#">Keyword: Bootstrap</a>
-                <div class="clearfix"></div>
-                <hr>
-
-                <p>If you're looking for help with Bootstrap code, the <code>twitter-bootstrap</code> tag at <a href="#">Stackoverflow</a> is a good place to find answers.</p>
-
-                <hr>
-                <form>
-                    <div class="input-group">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Add a comment..">
-                    </div>
-                </form>
-
-            </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-thumbnail"><img src="img/bg_4.jpg" class="img-responsive"></div>
-            <div class="panel-body">
-                <p class="lead">Social Good</p>
-                <p>1,200 Followers, 83 Posts</p>
-                <p>
-                    <img src="https://lh6.googleusercontent.com/-5cTTMHjjnzs/AAAAAAAAAAI/AAAAAAAAAFk/vgza68M4p2s/s28-c-k-no/photo.jpg" width="28px" height="28px">
-                    <img src="https://lh4.googleusercontent.com/-6aFMDiaLg5M/AAAAAAAAAAI/AAAAAAAABdM/XjnG8z60Ug0/s28-c-k-no/photo.jpg" width="28px" height="28px">
-                    <img src="https://lh4.googleusercontent.com/-9Yw2jNffJlE/AAAAAAAAAAI/AAAAAAAAAAA/u3WcFXvK-g8/s28-c-k-no/photo.jpg" width="28px" height="28px">
-                </p>
-            </div>
         </div>
     </div>
 </div><!--/row-->

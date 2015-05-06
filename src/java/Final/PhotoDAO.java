@@ -79,7 +79,8 @@ public class PhotoDAO {
             pb.setPhoto_id(rs.getInt("photo_id"));
             pb.setCaption(rs.getString("caption"));
             pb.setTime(rs.getTimestamp("create_at"));
-            pb.setUser_id(rs.getInt("user_id"));
+            pb.setUser_id(user_id);
+            pb.setUser_name(UserDAO.NameById(user_id));
             pb.setCircle_id(rs.getInt("circle_id"));
             pb.setLocation_id(rs.getInt("location_id"));
             pb.setPrivacy(rs.getString("privacy"));
@@ -156,7 +157,9 @@ public class PhotoDAO {
                     pb.setPhoto_id(rs.getInt("photo_id"));
                     pb.setCaption(rs.getString("caption"));
                     pb.setTime(rs.getTimestamp("create_at"));
-                    pb.setUser_id(rs.getInt("user_id"));
+                    int uid = rs.getInt("user_id");
+                    pb.setUser_id(uid);
+                    pb.setUser_name(UserDAO.NameById(uid));
                     pb.setCircle_id(rs.getInt("circle_id"));
                     pb.setLocation_id(rs.getInt("location_id"));
                     pb.setPrivacy(rs.getString("privacy"));

@@ -7,7 +7,7 @@
             <c:forEach items="${circleList}" var="circle">
 
                 <li class="list-group-item active" value="${circle.getCircle_id()}">
-                    <strong><c:out value="${circle.getName()}" /></strong>
+                    <strong><a href="#"><c:out value="${circle.getName()}" /></a></strong>
                 </li>
 
 

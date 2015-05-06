@@ -29,7 +29,7 @@ import javax.servlet.http.Part;
 @MultipartConfig
 public class PostMessageServelet extends HttpServlet {
 
-    public static final String UPLOAD_DIR = "/Users/apple/WebStorage";
+    public static final String UPLOAD_DIR = "/Users/apple/WebStorage/Tourini/images";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

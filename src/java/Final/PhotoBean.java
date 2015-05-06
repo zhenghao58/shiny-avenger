@@ -19,6 +19,7 @@ public class PhotoBean {
     private int circle_id;
     private int user_id;
     private String privacy;
+    private String user_name;
     
   
 
@@ -118,5 +119,19 @@ public class PhotoBean {
      */
     public void setPhoto_id(int photo_id) {
         this.photo_id = photo_id;
+    }
+
+    /**
+     * @return the user_name
+     */
+    public String getUser_name() {
+        return user_name;
+    }
+
+    /**
+     * @param user_name the user_name to set
+     */
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 }

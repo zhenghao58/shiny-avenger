@@ -113,6 +113,7 @@ public class CircleDAO {
             ResultSet rs = MyConnectionManager.getRs();
             if (rs != null && result) {
                 while (rs.next()) {
+                    if(rs==null) break;
                     UserBean ub = new UserBean();
                     ub.setName(rs.getString("name"));
                     ub.setUserName(rs.getString("username"));

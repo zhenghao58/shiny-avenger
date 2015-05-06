@@ -35,7 +35,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 var $panelWrapper = $('<div class="panel panel-default">').appendTo('#messages').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">' + message.time + '</a><h4>' + message.user_name + '</h4>'));
                 
                 var $panelBody = $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + message.text + '</p><div class="clearFix"></div><hr>');
-                if(message.location_id) $panelBody.append('<p style="color: #737373">'+$('select#selectLocation option[value="'+message.location_id+'"]').text()+'</p>');
+                if(message.location_id) $panelBody.append('<p><i class="glyphicon glyphicon-map-marker"></i> —at <strong style="color: #3B5999">'+$('select#selectLocation option[value="'+message.location_id+'"]').text()+'</strong></p>');
             });
             $('#messages').fadeIn('slow');  
         });
@@ -43,7 +43,13 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
 
     function getAllPhotoAjax(){
         return $.getJSON(contextPath + '/api/getAllPhotos', {user_id: $('#user-id').attr('value')}, function(responseJson) {
-                console.log(responseJson);
+            $.each(responseJson, function(index, photo) {
+                var $panelWrapper = $('<div class="panel panel-default">').appendTo('#photos').append($('<div class="panel-thumbnail">').html('<img src="'+contextPath+'/images/'+photo.user_id+'/'+photo.photo_id+'.jpg" class="img-responsive">'));
+                var $panelBody = $('<div class="panel-body">').appendTo($panelWrapper).append('<p class="lead">'+photo.user_name+'</p>').append('<p>'+photo.caption+'</p>');
+                $panelBody.append('<hr>').append($('<p>').html('<i class="glyphicon glyphicon-map-marker"></i> -at <strong style="color: #3B5999">'+$('select#selectLocation option[value="'+photo.location_id+'"]').text()+'</strong>'));
+                $panelBody.append($('<div class="clearfix">')).append('<form><input type="text" class="form-control" placeholder="Add a comment.."></form>');
+                $('#photos').fadeIn('slow'); 
+            });
         });
     }
 
@@ -102,10 +108,10 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 $('#friend-list li.list-group-item[value="'+user.user_id+'"]').attr('data-circle', circle_id);
             });
             $circleTitle.prepend('<span class="badge pull-right">' + users.length + '</span>');
-            
+            $circleTitle.unbind('click');
         })
         .fail(function() {
-            console.log("circle error on "+ circle);
+            console.log("circle error on "+ circle_id);
         })
     });
     
