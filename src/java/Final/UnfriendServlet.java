@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author 睿
  */
-@WebServlet(name = "AcceptServlet", urlPatterns = {"/api/respond"})
-public class RespondServlet extends HttpServlet {
+@WebServlet(name = "UnfriendServlet", urlPatterns = {"/api/unfriend"})
+public class UnfriendServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,22 +34,18 @@ public class RespondServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        FriendBean bean=new FriendBean();
-        //bean.setFriend_user_id(friend_user_id);
-        boolean accept= request.getParameter("accept").equals("true") ? true : false;
-        bean.setAccept(accept);
-        bean.setFriend_user_id(Integer.parseInt(request.getParameter("user_id")));
-        bean.setUser_id(Integer.parseInt(request.getParameter("friend_user_id")));   
-        String message="false";
-        try {
-            boolean success = FriendDAO.respond(bean,accept);
-            if(success) message = "true";
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                out.print(message);
-            }       
-        } catch (SQLException ex) {
-            Logger.getLogger(PostMessageServelet.class.getName()).log(Level.SEVERE, null, ex);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet UnfriendServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet UnfriendServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -79,7 +75,23 @@ public class RespondServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int user_id = Integer.parseInt(request.getParameter("user_id"));
+        int friend_user_id = Integer.parseInt(request.getParameter("friend_user_id"));
+        boolean success = false;
+        try {
+            success = FriendDAO.delete(user_id, friend_user_id);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(JoinCircleServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String message = "true";
+//        if (success) {
+//            message = "true";
+//        }
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.print(message);
+        }
     }
 
     /**

@@ -94,16 +94,17 @@ public class LocationDAO {
                     ResultSet rs1=cm1.getRs();
                     while(rs1.next()){
                         LocationBean lb1 = new LocationBean();
+                        int uid = rs1.getInt("user_id");
                         lb1.setLocation_id(rs1.getInt("location_id"));
                         lb1.setTime(rs1.getTimestamp("create_at"));
                         lb1.setCity_name(rs1.getString("city_name"));
                         lb1.setAttraction(rs1.getString("attraction"));
                         lb1.setLatitude(rs1.getFloat("latitude"));
                         lb1.setLongtitude(rs1.getFloat("longtitude"));
-                        lb1.setUser_id(rs1.getInt("user_id"));
+                        lb1.setUser_id(uid);
                         lb1.setCircle_id(rs1.getInt("circle_id"));
                         lb1.setPrivacy(rs1.getString("privacy"));
-                        lb1.setName(UserDAO.NameById(rs1.getInt("user_id")));
+                        lb1.setName(UserDAO.NameById(uid));
                         l.add(lb1);
                     }
                     cm1.closeConnection();
@@ -129,6 +130,7 @@ public class LocationDAO {
         cm.excute(searchQuery);
         ResultSet rs = cm.getRs();
         while (rs.next()) {
+            
             LocationBean lb = new LocationBean();
             lb.setLocation_id(rs.getInt("location_id"));
             lb.setTime(rs.getTimestamp("create_at"));
@@ -136,7 +138,8 @@ public class LocationDAO {
             lb.setAttraction(rs.getString("attraction"));
             lb.setLatitude(rs.getFloat("latitude"));
             lb.setLongtitude(rs.getFloat("longtitude"));
-            lb.setUser_id(rs.getInt("user_id"));
+            lb.setUser_id(user_id);
+            lb.setName(UserDAO.NameById(user_id));
             lb.setCircle_id(rs.getInt("circle_id"));
             lb.setPrivacy(rs.getString("privacy"));
             a.add(lb);
@@ -145,22 +148,24 @@ public class LocationDAO {
         return a;
     }
     
-        public static boolean visible(LocationBean lb, int user_id) throws SQLException {
+    public static boolean visible(LocationBean lb, int user_id) throws SQLException {
         String privacy = lb.getPrivacy();
         boolean result = false;
         if (privacy.equals("public") || privacy.equals("friend")) {
             result = true;
         } else if (privacy.equals("private")) {
             result = false;
-        } else if(privacy.equals("circle")){
+        } else if (privacy.equals("circle")) {
             String searchQuery
                     = "select * from Circle_friend where circle_id="
                     + lb.getCircle_id() + " and user_id="
                     + user_id + ";";
 //            MyConnectionManager.getConnection();
             System.out.println(searchQuery);
-            if(MyConnectionManager.getCon()==null) MyConnectionManager.getConnection();
-            result=MyConnectionManager.excute(searchQuery);
+            if (MyConnectionManager.getCon() == null) {
+                MyConnectionManager.getConnection();
+            }
+            result = MyConnectionManager.excute(searchQuery);
 //            MyConnectionManager.closeConnection();
         }
         return result;
@@ -191,13 +196,14 @@ public class LocationDAO {
 //        }
         
         String searchQuery=
-                "select * from Current_Location m where m.user_id in (select friend_user_id from Friend  f where f.user_id="
+                "select * from Current_Location m natural join Locations where m.user_id in (select friend_user_id from Friend  f where f.user_id="
                 +user_id+") "
                 + "and m.circle_id in(select circle_id from Circle_friend cf where cf.user_id="
                 +user_id+") and privacy='circle';";
         cm.excute(searchQuery);
         ResultSet rs = cm.getRs();
         while (rs.next()) {
+                int uid = rs.getInt("user_id");
                 LocationBean lb = new LocationBean();
                 lb.setLocation_id(rs.getInt("location_id"));
                 lb.setTime(rs.getTimestamp("create_at"));
@@ -205,34 +211,37 @@ public class LocationDAO {
                 lb.setAttraction(rs.getString("attraction"));
                 lb.setLatitude(rs.getFloat("latitude"));
                 lb.setLongtitude(rs.getFloat("longtitude"));
-                lb.setUser_id(rs.getInt("user_id"));
+                lb.setUser_id(uid);
+                lb.setName(UserDAO.NameById(uid));
                 lb.setCircle_id(rs.getInt("circle_id"));
                 lb.setPrivacy(rs.getString("privacy"));
                 a.add(lb);
         }
         
         String searchQuery1=
-                "select * from Current_Location m where m.user_id in (select friend_user_id from Friend  f where f.user_id="
+                "select * from Current_Location m natural join Locations where m.user_id in (select friend_user_id from Friend  f where f.user_id="
                 +user_id+") "
                 + "and privacy='friend';";
         cm.excute(searchQuery1);
         rs = cm.getRs();
         while (rs.next()) {
                 LocationBean lb = new LocationBean();
+                int uid = rs.getInt("user_id");
                 lb.setLocation_id(rs.getInt("location_id"));
                 lb.setTime(rs.getTimestamp("create_at"));
                 lb.setCity_name(rs.getString("city_name"));
                 lb.setAttraction(rs.getString("attraction"));
                 lb.setLatitude(rs.getFloat("latitude"));
                 lb.setLongtitude(rs.getFloat("longtitude"));
-                lb.setUser_id(rs.getInt("user_id"));
+                lb.setUser_id(uid);
+                lb.setName(UserDAO.NameById(uid));
                 lb.setCircle_id(rs.getInt("circle_id"));
                 lb.setPrivacy(rs.getString("privacy"));
                 a.add(lb);
         }
         
         //add all users' locations with public privacy
-        String addQuery = "select * from Current_Location where privacy='public'";
+        String addQuery = "select * from Current_Location natural join Locations where privacy='public'";
         cm.getConnection();
         cm.excute(addQuery);
         rs = cm.getRs();
@@ -244,6 +253,7 @@ public class LocationDAO {
             int locationId = rs.getInt("location_id");
             if (!set.contains(locationId)) {
                 set.add(locationId);
+                int uid = rs.getInt("user_id");
                 LocationBean lb = new LocationBean();
                 lb.setLocation_id(rs.getInt("location_id"));
                 lb.setTime(rs.getTimestamp("create_at"));
@@ -251,7 +261,8 @@ public class LocationDAO {
                 lb.setAttraction(rs.getString("attraction"));
                 lb.setLatitude(rs.getFloat("latitude"));
                 lb.setLongtitude(rs.getFloat("longtitude"));
-                lb.setUser_id(rs.getInt("user_id"));
+                lb.setUser_id(uid);
+                lb.setName(UserDAO.NameById(uid));
                 lb.setCircle_id(rs.getInt("circle_id"));
                 lb.setPrivacy(rs.getString("privacy"));
                 a.add(lb);

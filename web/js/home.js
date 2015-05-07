@@ -42,7 +42,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     }
 
     function getAllPhotoAjax(){
-        return $.getJSON(contextPath + '/api/getAllPhotos', {user_id: $('#user-id').attr('value')}, function(responseJson) {
+        return $.getJSON(contextPath + '/api/getAllPhotos', {user_id: $('#user-id').attr('value')}, function (responseJson) {
             $.each(responseJson, function(index, photo) {
                 var $panelWrapper = $('<div class="panel panel-default">').appendTo('#photos').append($('<div class="panel-thumbnail">').html('<img src="'+contextPath+'/images/'+photo.user_id+'/'+photo.photo_id+'.jpg" class="img-responsive">'));
                 var $panelBody = $('<div class="panel-body">').appendTo($panelWrapper).append('<p class="lead">'+photo.user_name+'</p>').append('<p>'+photo.caption+'</p>');
@@ -53,6 +53,17 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         });
     }
 
+    function getAllLocationAjax(){
+        return $.getJSON(contextPath + '/api/getAllLocations', {user_id: $('#user-id').attr('value')}, function (responseJson) {
+            console.log(responseJson);
+            $.each(responseJson, function(index, location) {
+
+                var $panelWrapper = $('<div class="panel panel-default">').appendTo('#locations').append($('<div class="panel-heading">').html('<a href="#" class="pull-right">'+location.time+'</a><h4>' + location.attraction + '</h4>'));
+                $('<div class="panel-body">').appendTo($panelWrapper).append('<p>' + location.name + ' is at <strong style="color: #3B5999">' +location.attraction+', '+location.city_name+ '</strong></p><div class="clearFix"></div><hr>');
+                $('#locations').fadeIn(1000); 
+            });
+        });
+    }
     function getAllUsersAjax() {
         return $.getJSON(contextPath + '/api/getAllUsers', {user_id: $('#user-id').attr('value')}, function (data) {
             var allUsers = new Bloodhound({
@@ -88,7 +99,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
     //     })
 
 //----------------------------------queue Ajax solution 3-------------------------
-    $.when(getAllMessageAjax()).done(getAllPhotoAjax()).done(getAllUsersAjax());
+    $.when(getAllMessageAjax()).done(getAllPhotoAjax()).done(getAllLocationAjax()).done(getAllUsersAjax());
 
 
 //--------------------get friends in a circle-----------------
@@ -236,7 +247,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                 }
             });
 
-//--------------------remove friend from circle-----------
+            //--------------------remove friend from circle-----------
             $('.friend-dropdown ul.dropdown-menu a[role="delete-circle"]').click(function(event) {
                 var $friend_item = $(this).parents('li.list-group-item');
                 var friend_user_id = $friend_item.attr('value');
@@ -247,6 +258,26 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                         $friend_item.removeAttr('data-circle');
                         $('li.circle-member[value="'+friend_user_id+'"]').remove();
                         $circleSize = $('#circle-list li.active.list-group-item[value='+circle_id+'] span.badge');
+                        var pre = parseInt($circleSize.text());
+                        $circleSize.text(pre-1);
+                    }
+                });
+            });
+
+            //--------------------remove friend----------
+            $('.friend-dropdown ul.dropdown-menu a[role="unfriend"]').click(function(event) {
+                var $friend_item = $(this).parents('li.list-group-item');
+                var friend_user_id = $friend_item.attr('value');
+                var user_id = id;
+                var circle_id = $friend_item.attr('data-circle');
+                console.log(friend_user_id+' '+user_id);
+                $.post(contextPath + '/api/unfriend', {user_id: user_id, friend_user_id: friend_user_id}, function(data) {
+                    console.log(data);
+                    if(data==='true'){
+                        swal('Remove!', '', 'success');
+                        $('li.circle-member[value="'+friend_user_id+'"]').remove();
+                        $circleSize = $('#circle-list li.active.list-group-item[value='+circle_id+'] span.badge');
+                        $('#friend-list li.list-group-item[value="'+friend_user_id+'"]').remove();
                         var pre = parseInt($circleSize.text());
                         $circleSize.text(pre-1);
                     }
@@ -318,6 +349,8 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         });
     });
 
+
+//--------------------------respond to a friend request----------------------
     $(".dropdown-alerts button.btn-circle").click(function (event) {
         event.stopPropagation();
         var friend_user_id = $(this).val();
@@ -327,6 +360,9 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
             if (data === 'true') {
                 $item.hide('slow');
                 $item.next('.divider').hide('slow');
+                var requestNumber = parseInt($('#friendRequest span.badge').text());
+                requestNumber -= 1;
+                $('#friendRequest span.badge').text(requestNumber);
             } else
                 swal('Error!', 'Server Error', 'error');
         });

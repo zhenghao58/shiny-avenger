@@ -38,7 +38,7 @@
                     <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li> 
                 </ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown" id="friendRequest">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-bell fa-fw"></i>
                     <c:if test="${!requestList.isEmpty()}">

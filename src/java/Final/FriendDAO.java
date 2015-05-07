@@ -52,9 +52,8 @@ public class FriendDAO {
         return result;
     }
 
-    public static boolean delete(String friend_name, int user_id) throws SQLException {
+    public static boolean delete(int friend_user_id, int user_id) throws SQLException {
         FriendBean bean = new FriendBean();
-        int friend_user_id = idByName(friend_name);
         bean.setAccept(false);
         boolean result = true;
         String deleteQuery
@@ -66,6 +65,14 @@ public class FriendDAO {
                 = "delete from Friend where user_id="
                 + friend_user_id + " and friend_user_id="
                 + user_id + ";";
+        String deleteQuery3=
+                "delete from Circle_friend where user_id ="
+                +user_id+" and circle_id in (select circle_id from Circle where user_id="
+                +friend_user_id+");";
+        String deleteQuery4=
+                "delete from Circle_friend where user_id ="
+                +friend_user_id+" and circle_id in (select circle_id from Circle where user_id="
+                +user_id+");";
         //connect to DB 
         ConnectionManager cm =new ConnectionManager();
         cm.getConnection();
@@ -107,12 +114,14 @@ public class FriendDAO {
                 = "select * from Users where user_id in(select friend_user_id from Friend where accept=1 and user_id="
                 + user_id + ");";
         ArrayList<UserBean> a = new ArrayList<UserBean>();
-        MyConnectionManager.getConnection();
-        boolean result = MyConnectionManager.excute(searchQuery);
-        ResultSet rs = MyConnectionManager.getRs();
+        ConnectionManager cm=new ConnectionManager();
+        cm.getConnection();
+        cm.excute(searchQuery);
+        ResultSet rs = cm.getRs();
+
         if(rs!=null){
             while (rs.next()) {
-
+                if(rs==null) break;
                 UserBean ub = new UserBean();
                 ub.setName(rs.getString("name"));
                 //ub.setUserName(rs.getString("username"));
@@ -120,8 +129,8 @@ public class FriendDAO {
                 a.add(ub);
             }
         }
+        cm.closeConnection();
 
-        MyConnectionManager.closeConnection();
         return a;
     }
     

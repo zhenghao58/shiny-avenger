@@ -141,7 +141,7 @@ public class PhotoDAO {
                 "select * from Photos m where m.user_id in (select friend_user_id from Friend  f where f.user_id="
                 +user_id+") "
                 + "and m.circle_id in(select circle_id from Circle_friend cf where cf.user_id="
-                +user_id+");";
+                +user_id+"  and privacy='circle');";
         cm.excute(searchQuery);
         ResultSet rs = cm.getRs();
         while (rs.next()) {
@@ -158,7 +158,26 @@ public class PhotoDAO {
                     pb.setPrivacy(rs.getString("privacy"));
                     a.add(pb);
             }
-        
+        String searchQuery1=
+                "select * from Photos m where m.user_id in (select friend_user_id from Friend  f where f.user_id="
+                +user_id+") "
+                + "and privacy='friend';";
+        cm.excute(searchQuery1);
+        rs = cm.getRs();
+        while (rs.next()) {
+                if(rs==null) break;
+                    PhotoBean pb = new PhotoBean();
+                    pb.setPhoto_id(rs.getInt("photo_id"));
+                    pb.setCaption(rs.getString("caption"));
+                    pb.setTime(rs.getTimestamp("create_at"));
+                    int uid = rs.getInt("user_id");
+                    pb.setUser_id(uid);
+                    pb.setUser_name(UserDAO.NameById(uid));
+                    pb.setCircle_id(rs.getInt("circle_id"));
+                    pb.setLocation_id(rs.getInt("location_id"));
+                    pb.setPrivacy(rs.getString("privacy"));
+                    a.add(pb);
+            }
         HashSet<Integer> set = new HashSet();
         for (PhotoBean pb : a) {
             set.add(pb.getPhoto_id());
