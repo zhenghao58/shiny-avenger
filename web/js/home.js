@@ -308,6 +308,7 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
                     swal('Circle Created!', '', 'success');
                     var $newCircleItem = $('<li class="list-group-item active">').appendTo('#circle-list').append('<span class="badge">0</span><strong>' + circleName+'</strong>');
                     $newCircleItem.fadeIn('slow');
+                    $('#selectCircleEdit').append('<option disabled>'+circleName+' (You have to refresh the page)</option>');
                 }
                 else
                     swal('Error!', 'Server Error', 'error');
