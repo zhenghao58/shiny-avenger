@@ -123,13 +123,13 @@ public class UserDAO {
                 + user_id + "'and user_id not in(select friend_user_id from Friend where accept=1 and user_id='"
                 + user_id + "');";
 
-        MyConnectionManager.getConnection();
-        MyConnectionManager.excute(searchQuery);
-        ResultSet rs = MyConnectionManager.getRs();
-//        ConnectionManager cm = new ConnectionManager();
-//        cm.getConnection();
-//        cm.excute(searchQuery);
-//        ResultSet rs = cm.getRs();
+//        MyConnectionManager.getConnection();
+//        MyConnectionManager.excute(searchQuery);
+//        ResultSet rs = MyConnectionManager.getRs();
+        ConnectionManager cm = new ConnectionManager();
+        cm.getConnection();
+        cm.excute(searchQuery);
+        ResultSet rs = cm.getRs();
         if (rs != null) {
             while (rs.next()) {
                 UserBean ub = new UserBean();
@@ -139,8 +139,8 @@ public class UserDAO {
                 a.add(ub);
             }
         }
-
-        MyConnectionManager.closeConnection();
+        cm.closeConnection();
+        //MyConnectionManager.closeConnection();
         return a;
     }
 }

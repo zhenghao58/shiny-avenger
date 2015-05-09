@@ -35,7 +35,7 @@ public class PhotoDAO {
                     + location_id + ",'"
                     + privacy + "','"
                     + caption + "');";
-        } else if (circle_id == 0 && location_id != 0) {
+        } else if (circle_id != 0 && location_id == 0) {
             insertQuery = "insert into Photos(user_id,circle_id,privacy,caption) values("
                     + user_id + ","
                     + circle_id + ",'"
@@ -216,6 +216,15 @@ public class PhotoDAO {
         });
 
         return a;
+    }
+
+    public static List<PhotoBean> search(int user_id,String str) throws SQLException {
+        List<PhotoBean> l=searchAll(user_id);
+        List<PhotoBean> l1=new ArrayList<>();
+        for(PhotoBean pb:l)
+            if(pb.getCaption().matches("(.*)"+str+"(.*)"))
+                l1.add(pb);
+        return l1;
     }
 
 }

@@ -3,24 +3,32 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/home.jsp</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/LoginServlet.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/nav.jsp</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/RespondServlet.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/friend.jsp</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/RequestServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/GetAllLocationServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/PhotoDAO.java</file>
             <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/MessageDAO.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/index.jsp</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/js/home.js</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/CircleDAO.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/GetAllMessageServlet.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/GetAllUsersServlet.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/NewCircleServlet.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/PostMessageServelet.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/FriendDAO.java</file>
-            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/UserBean.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/RespondServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/LocationBean.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/GetAllPhotoServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/PhotoBean.java</file>
             <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/MessageBean.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/JoinCircleServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/PostMessageServelet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/css/home.css</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/CircleDAO.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/FriendDAO.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/GetAllMessageServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/js/home.js</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/friend.jsp</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/main.jsp</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/home.jsp</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/LocationDAO.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/SearchServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/web/nav.jsp</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/UserBean.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/LoginServlet.java</file>
             <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/UserDAO.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/UnfriendServlet.java</file>
+            <file>file:/Users/apple/NetBeansProjects/FinalProj/src/java/Final/PostLocationServlet.java</file>
         </group>
     </open-files>
 </project-private>

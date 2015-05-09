@@ -102,6 +102,7 @@
                                         <div class="fileUpload btn btn-primary btn-sm">
                                             <span>Upload Photo</span>
                                             <input type="file" class="upload" id="uploadBtn" name="file"/>
+                                            <img id="blah" src="#" alt="your image" style="display:none"/>
                                         </div>
                                     </li>
                                     <!--                                     <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>

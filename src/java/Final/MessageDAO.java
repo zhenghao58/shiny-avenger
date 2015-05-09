@@ -171,4 +171,13 @@ public static boolean post(MessageBean bean) throws SQLException {
         return a;
     }
 
+    public static List<MessageBean> search(int user_id,String str) throws SQLException {
+        List<MessageBean> l=searchAll(user_id);
+        List<MessageBean> l1=new ArrayList<>();
+        for(MessageBean mb:l)
+            if(mb.getText().matches("(.*)"+str+"(.*)"))
+                l1.add(mb);
+        return l1;
+    }
+
 }

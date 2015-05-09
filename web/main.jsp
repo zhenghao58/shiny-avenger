@@ -43,24 +43,8 @@
         </div>
         <div id="photos" style="display:none">
         </div>
-
-<!--         <div class="panel panel-default">
-            <div class="panel-heading"><a href="#" class="pull-right">Boot</a> <h4>Hola</h4></div>
-            <div class="panel-body">
-                <img src="//placehold.it/150x150" class="img-circle pull-right"> <a href="#">Free @Bootply</a>
-                <div class="clearfix"></div>
-                Bootstrap is front end frameworkto build custom web applications that are fast.
-                <hr>
-                <ul class="list-unstyled"><li><a href="#">Dashboard</a></li><li><a href="#">Darkside</a></li><li><a href="#">Greenfield</a></li></ul>
-            </div>
+        <div id="search-photos" style="display:none">
         </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4>What Is Bootstrap?</h4></div>
-            <div class="panel-body">
-                Bootstrap is front end frameworkto build custom web applications that are fast, responsive &amp; intuitive. It consist of CSS and HTML for typography, forms, buttons, tables, grids, and navigation along with custom-built jQuery plug-ins and support for responsive layouts. With dozens of reusable components for navigation, pagination, labels, alerts etc..            
-            </div>
-        </div> -->
     </div>
 
     <!-- main col right -->
@@ -76,9 +60,12 @@
                 </div>
             </form>
         </div>
-
+        <hr>
         <div id="messages" style="display:none">
         </div>
+        <div id="search-messages" style="display:none">
+        </div>
+        <hr>
         <div id="locations" style="display:none">
         </div>
     </div>

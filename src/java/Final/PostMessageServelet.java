@@ -48,6 +48,7 @@ public class PostMessageServelet extends HttpServlet {
         InputStream fileContent;
         String privacy = request.getParameter("privacy").toLowerCase();
         int circle_id = Integer.parseInt(request.getParameter("circle_id"));
+        System.out.println("circle id is : "+circle_id);
         String text = request.getParameter("text").length()!=0 ? request.getParameter("text"): "I posted a picture." ;
         int requestId = Integer.parseInt(request.getParameter("user_id"));
         int location_id = Integer.parseInt(request.getParameter("location"));
@@ -55,7 +56,6 @@ public class PostMessageServelet extends HttpServlet {
         boolean messageResult = false;
         int photoResult = 0;
         if (fileName.length() == 0) {
-            System.out.println("no file");
             MessageBean bean = new MessageBean();
             bean.setText(text);
             bean.setUser_id(requestId);
@@ -83,8 +83,6 @@ public class PostMessageServelet extends HttpServlet {
                 if (photoResult != 0) {
                     File file = new File(fileDir, Integer.toString(photoResult)+".jpg");
                     Files.copy(fileContent, file.toPath());
-                    String imageFileName = file.getName();
-                    System.out.println(imageFileName);
                     message = "true";
 
                 }

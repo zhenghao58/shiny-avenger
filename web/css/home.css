@@ -26,6 +26,10 @@ button.btn.btn-lg.btn-primary{
   min-height: 46px;
 }
 
+#locations .panel-heading{
+    background-color: #ADC7FF;
+}
+
 input#search-friend.typeahead.form-control{
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
