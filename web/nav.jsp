@@ -25,9 +25,6 @@
             <li>
                 <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
             </li>
-            <li>
-                <a href="#" id="top-refresh"><span class="badge">badge</span></a>
-            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-top-links">
             <li class="dropdown">

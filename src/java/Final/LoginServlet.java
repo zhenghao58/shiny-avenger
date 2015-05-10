@@ -35,9 +35,16 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static HttpServletRequest setRequest(HttpServletRequest request, int user_id) {
+    private static HttpServletRequest setRequest(HttpServletRequest request, int user_id){
         List<CircleBean> circles = CircleDAO.search(user_id);
+        List<LocationBean> locationsNear = new ArrayList<>();
+        try {
+            locationsNear = LocationDAO.search(user_id, 30);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         request.setAttribute("requestList", getRequestUsers(user_id));
+        request.setAttribute("locationList", locationsNear);
         request.setAttribute("staticLocationList", getAllStaticLocation());
         request.setAttribute("circleList", circles);
         return request;

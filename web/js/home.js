@@ -454,6 +454,46 @@ $(document).ready(function () {/* off-canvas sidebar toggle */
         }
     }
 
+    function geoFindMe() {
+      var output = document.getElementById("out");
+
+      if (!navigator.geolocation){
+        output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+        return;
+      }
+
+      function success(position) {
+        var latitude  = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        output.innerHTML = '<p class="text-center">Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+
+        var img = new Image();
+        img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=13&size=300x300&sensor=false";
+
+        output.appendChild(img);
+        $('#out img').css({
+            display: 'block',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+        });
+        $('#selectLocation').empty();
+        $('#selectLocation').append('<option value="0">Select location</option>');
+        $('#selectLocation').append('<option value="1">Wall Street</option>');
+        $('#selectLocation').append('<option value="3">Statue of Liberty</option>');
+        $('#selectLocation').append('<option value="4">Time Square</option>');
+      };
+
+      function error() {
+        output.innerHTML = "Unable to retrieve your location";
+      };
+
+      output.innerHTML = '<p class="text-center">Locating…</p>';
+
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
+
+    $('#showLocation').click(geoFindMe);
     $("#uploadBtn").change(function(){
         readURL(this);
     });

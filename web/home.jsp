@@ -39,7 +39,6 @@
                         <ul class="nav hidden-xs" id="lg-menu">
                             <li class="active"><a href="#main-view" id='main-view-btn'><i class="glyphicon glyphicon-list-alt"></i> Home</a></li>
                             <li><a href="#friend-view" id='friend-view-btn'><i class="glyphicon glyphicon-list"></i> Friends</a></li>
-                            <li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> Saved</a></li>
                             <li><a href=""><i class="glyphicon glyphicon-refresh"></i> Refresh</a></li>
                         </ul>
                         <ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -52,8 +51,7 @@
                         <ul class="nav visible-xs" id="xs-menu">
                             <li><a href="" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
                             <li><a href="#friends" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
+                            <li><a href="" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
                         </ul>
 
                     </div>
@@ -135,8 +133,13 @@
                                     </c:forEach>
                                 </select>
                             </div>
+
                         </div>
                     </form>
+                    <div id="map" class="center-block">
+                        <p><button id="showLocation" class="btn center-block btn-primary">Show my location</button></p>
+                        <div id="out" class="text-primary"></div>
+                    </div>
                 </div>
             </div>
         </div>

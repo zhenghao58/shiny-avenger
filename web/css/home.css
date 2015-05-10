@@ -26,6 +26,12 @@ button.btn.btn-lg.btn-primary{
   min-height: 46px;
 }
 
+#map{
+  padding-bottom: 10px;
+  padding-top: 10px;
+  background-color: #f2f2f2;
+}
+
 #locations .panel-heading{
     background-color: #ADC7FF;
 }

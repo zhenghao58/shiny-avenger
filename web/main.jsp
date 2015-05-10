@@ -61,11 +61,13 @@
             </form>
         </div>
         <hr>
+        <p class="lead">Messages Feed</p>
         <div id="messages" style="display:none">
         </div>
         <div id="search-messages" style="display:none">
         </div>
         <hr>
+        <p class="lead">Location Feed</p>
         <div id="locations" style="display:none">
         </div>
     </div>

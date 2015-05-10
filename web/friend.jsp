@@ -47,7 +47,18 @@
                 <ul class="list-group">
                 </ul>
             </div>
-        </div> 
+        </div>
+        <p class="lead">Friends Nearby</p>
+        <c:forEach items="${locationList}" var="row">
+             <div class="panel panel-default">
+                <div class="panel-heading"><a class="pull-right">${row.getTime()}</a> <h4>${row.getName()}</h4></div>
+                <div class="panel-body">
+                    <p>${row.getName()} is at <strong style="color: #3B5999">${row.getAttraction()}, ${row.getCity_name()}</strong></p>
+                    <div class="clearFix"></div>
+                    <hr>
+                </div>
+            </div>
+        </c:forEach> 
 
         <div class="modal fade" id="editCircleModal">
             <div class="modal-dialog">
